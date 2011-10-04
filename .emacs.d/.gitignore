@@ -1,0 +1,6 @@
+desktop/
+elpa/
+el-get
+url/
+.emacs.desktop*
+tramp
