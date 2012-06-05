@@ -9,6 +9,7 @@
 ;;
 (setq dotfiles-dir "/home/smd/.emacs.d/")
 (server-start)
+(require 'cl)
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -18,16 +19,25 @@
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 
+
+;;
+;;------------------------------------------------------------------------------
+;; E N V I R O N M E N T    P A T H S
+;;------------------------------------------------------------------------------
+; show env var named path
+(getenv "PATH")
+
+; example of setting env var named “path”
+; by appending a new path to existing path
+(setenv "PATH"
+  (concat (getenv "PATH") ":~/.lein/bin" ":~/opt/leiningen/"))
 ;;
 ;;------------------------------------------------------------------------------
 ;; L O A D    P A T H S
 ;;------------------------------------------------------------------------------
 (add-to-list 'load-path dotfiles-dir)
-
+(add-to-list 'load-path "/home/smd/.emacs.d/el-get/color-theme/")
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/elib")
-(load "~/.emacs.d/wombat.el")
-
-
 
 
 (custom-set-variables
@@ -41,6 +51,19 @@
  '(erc-nickserv-passwords (quote ((freenode (("bitrot" . "bitrothappens") ("" . "mtg58or"))))))
  '(w3m-use-cookies t))
 
+
+(defun unix-file ()
+  "Change the current buffer to Latin 1 with Unix line-ends."
+  (interactive)
+  (set-buffer-file-coding-system 'iso-latin-1-unix t))
+(defun dos-file ()
+  "Change the current buffer to Latin 1 with DOS line-ends."
+  (interactive)
+  (set-buffer-file-coding-system 'iso-latin-1-dos t))
+(defun mac-file ()
+  "Change the current buffer to Latin 1 with Mac line-ends."
+  (interactive)
+  (set-buffer-file-coding-system 'iso-latin-1-mac t))
 
 
 (put 'upcase-region 'disabled nil)
@@ -82,23 +105,28 @@
 (add-to-list 'load-path (concat dotfiles-dir "el-get/el-get"))
 (unless (require 'el-get nil t)
   (url-retrieve
-   "https://github.com/dimitri/el-get/raw/master/el-get-install.el"
+   "https://raw.github.com/dimitri/el-get/master/el-get-install.el"
    (lambda (s)
      (end-of-buffer)
      (eval-print-last-sexp))))
 
 (setq el-get-sources
-      '((:name ruby-compilation)
+      '(;(:name ruby-compilation)
 	(:name magit
 	 :after (lambda () (global-set-key (kbd "C-x C-z") 'magit-status)))
-	ruby-mode fixme-mode slime paredit flymake-ruby haml-mode yaml-mode markdown-mode window-number typing color-theme color-theme-solarized))
+	ruby-mode fixme-mode slime paredit flymake-ruby clojure-mode swank-clojure haml-mode yaml-mode markdown-mode window-number rinari color-theme color-theme-solarized color-theme-zen-and-art color-theme-twilight))
 
 (el-get 'sync)
 
+(require 'color-theme)
+(color-theme-initialize)
+(load-file "~/.emacs.d/el-get/color-theme-twilight/color-theme-twilight.el")
+(color-theme-twilight)
 
 (load-file (concat dotfiles-dir "keybindings.el"))
 (load-file (concat dotfiles-dir "extra-modes.el"))
 (load-file (concat dotfiles-dir "programming-modes.el"))
+(load-file (concat dotfiles-dir "macros.el"))
 
 
 ;;; This was installed by package-install.el.
@@ -111,9 +139,10 @@
      (expand-file-name "~/.emacs.d/elpa/package.el"))
   (package-initialize))
 
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#000000" :foreground "#f6f3e8" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :height 110 :width normal :foundry "unknown" :family "Inconsolata")))))
+;; (custom-set-faces
+;;   ;; custom-set-faces was added by Custom.
+;;   ;; If you edit it by hand, you could mess it up, so be careful.
+;;   ;; Your init file should contain only one such instance.
+;;   ;; If there is more than one, they won't work right.
+;;  '(default ((t (:inherit nil :stipple nil :background "#000000" :foreground "#f6f3e8" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :height 110 :width normal :foundry "unknown" :family "Inconsolata")))))
+(put 'narrow-to-region 'disabled nil)
