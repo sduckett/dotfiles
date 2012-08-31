@@ -1,0 +1,38 @@
+# offlineimap will be used, so we're going to
+set mbox_type=Maildir
+set folder=$HOME/.mail
+
+set spoolfile=+"personal/INBOX"
+
+set from = "user@domain.com"
+set realname = "My Name"
+set imap_user = "user@domain.com"
+set imap_pass = "s3cr3t"
+set smtp_url = "smtp://user@smtp.gmail.com:587/"
+set smtp_pass = "s3cr3t"
+
+set folder = "imaps://imap.gmail.com:993"
+set spoolfile = "+INBOX"
+set postponed="+[Gmail]/Drafts"
+set header_cache=~/.mutt/cache/headers
+set message_cachedir=~/.mutt/cache/bodies
+set certificate_file=~/.mutt/certificates
+
+set move = no
+set sort = 'threads'
+set sort_aux = 'last-date-received'
+set imap_check_subscribed
+
+color normal	white black
+color attachment brightyellow black
+color hdrdefault cyan black
+color indicator black cyan
+color markers	brightred black
+color quoted	green black
+color signature cyan black
+color status	brightgreen blue
+color tilde	blue black
+color tree	red black
+
+color index	red black ~D
+color index	magenta black ~T
