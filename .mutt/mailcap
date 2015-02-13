@@ -1,0 +1,18 @@
+# MS Word documents
+# application/msword; ~/.mutt/view_attachment.sh %s "-" '/Applications/TextEdit.app'
+
+# Images
+image/jpg; qiv %s
+image/jpeg; qiv %s
+image/pjpeg; qiv %s
+image/png; qiv %s
+image/gif; qiv %s
+
+# PDFs
+application/pdf; evince %s
+
+# HTML
+text/html; chromium %s 
+
+# Unidentified files
+# application/octet-stream; ~/.mutt

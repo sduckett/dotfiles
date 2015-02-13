@@ -1,0 +1,17 @@
+XTerm*loginShell:true
+URxvt.buffered:         true
+URxvt.background:       black
+URxvt.foreground:       white
+URxvt.cursorColor:      gray 
+URxvt.underlineColor:   yellow
+URxvt.font:             xft:Inconsolata\-dz for Powerline:pixelsize=16:antialias=true:hinting=true
+URxvt.boldFont:         xft:Inconsolata\-dz for Powerline:bold:pixelsize=16:antialias=true:hinting=true
+URxvt.colorUL:          #4682B4
+URxvt.matcher.button:   1
+URxvt.perl-ext-common:      default,matcher,clipboard,url-select,keyboard-select
+URxvt.url-select.launcher:  chromium
+URxvt.url-select.underline: true
+URxvt.keysym.M-u:           perl:url-select:select_next
+URxvt.keysym.M-Escape:      perl:keyboard-select:activate
+URxvt.keysym.M-s:           perl:keyboard-select:search
+URxvt.iso14755 : false
