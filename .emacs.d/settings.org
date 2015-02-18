@@ -1,0 +1,683 @@
+#+TITLE:   Sean's Emacs Configuration
+#+AUTHOR:  Sean Duckett
+#+EMAIL:   sduckett@gmail.com
+#+LANGUAGE: en
+#+PROPERTY: header-args :tangle yes
+#+HTML_HEAD: <link rel="stylesheet" href="http://dakrone.github.io/org.css" type="text/css" />
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+OPTIONS: H:4 num:nil toc:t \n:nil @:t ::t |:t ^:{} -:t f:t *:t
+#+OPTIONS: skip:nil d:(HIDE) tags:not-in-toc
+#+TODO: SOMEDAY(s) TODO(t) INPROGRESS(i) WAITING(w@/!) NEEDSREVIEW(n@/!) | DONE(d)
+#+TODO: WAITING(w@/!) HOLD(h@/!) | CANCELLED(c@/!)
+#+TAGS: export(e) noexport(n)
+#+STARTUP: align fold nodlcheck lognotestate content
+
+* Foreward
+This is a work in progress, where I attempt to write a literate
+configuration file for Emacs and see how it affects my thinking of the
+system as a whole. Depending on what version of this work you are
+reading, there might be steps that don't work, broken code, and
+descriptions that are hard to follow. Please accept my apologies and
+inform me of any glaring omissions. If anything is gained in the
+process, I will consider it to have been a useful exercise.
+
+This file was last exported: {{{time(%Y-%m-%d %H:%M)}}}
+
+* Introduction
+The idea of writing a literate configuration file was mentioned during
+a recent office-hours chat, but the benefits described were limited to
+one: looking good on Github. I'm not sure I believe it, so I decided
+to give it a try and see if I happen to notice any additional benefits.
+
+To get started, have a look at your `~/.emacs.d/init.el`. If you'd
+done any customizations there, move them to a file (perhaps
+`~/.emacs.d/custom-additions.el`) that you can load after we do some
+setup.
+
+Next, get a list of installed packages (`M-x package-list-packages RET`)
+and search for the set of "Installed" packages (`C-s installed RET`).
+Make a list of the packages you've installed, if any, and put them in
+`~/.emacs.d/packages.el`. (This might come in useful later.)
+
+Put the following in `~/.emacs.d/init.el`:
+
+#+BEGIN_SRC
+  ;; keep customize settings in their own file
+  (setq custom-file "~/.emacs.d/custom.el")
+  (when (file-exists-p custom-file)
+    (load custom-file))
+
+  ;; load the package management configuration
+  (setq package-configuration
+        (expand-file-name "packages.el"
+                          user-emacs-directory))
+  (when (file-exists-p package-configuration)
+    (load package-configuration))
+
+  ;; translate the literate configuration and load it.
+  (require 'org)
+  (org-babel-load-file
+   (expand-file-name "settings.org"
+                     user-emacs-directory))
+#+END_SRC
+
+Next, put the following in `~/.emacs.d/packages.el`:
+
+#+BEGIN_SRC emacs-lisp
+  (require 'package)
+
+  (when (< emacs-major-version 24)
+    ;; For important compatibility libraries like cl-lib
+    (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+
+  (add-to-list 'package-archives
+               '("melpa" . "http://melpa.org/packages/"))
+  (add-to-list 'package-archives
+               '("melpa-stable" . "http://stable.melpa.org/packages/"))
+
+  (defvar my-packages '(better-defaults paredit idle-highlight-mode ido-ubiquitous
+                        find-file-in-project magit smex scpaste clojure-mode))
+
+  (dolist (p my-packages)
+    (when (not (package-installed-p p))
+          (package-install p)))
+
+  (package-initialize)
+  (setq package-enable-at-startup nil)
+
+#+END_SRC
+
+This is the platform from which the rest of the configuration is built.
+
+* Configuration
+** Packages that need to be installed
+This is code that installs packages before any config is loaded, since a lot of
+things add hooks that don't work if packages aren't installed.
+
+#+BEGIN_SRC emacs-lisp
+  (defvar smd/install-packages
+    '(
+      ;; package management
+      use-package
+
+      ;; themeing
+      ;;smart-mode-line
+      
+      ;; misc
+      gist
+
+      ;; IRC/ERC and social stuff
+      twittering-mode
+
+      ;; for auto-complete
+      fuzzy popup company
+
+      ;; editing utilities
+      expand-region smex 
+      ;; ag undo-tree iedit ido-ubiquitous
+      ;; ido-vertical-mode
+      yasnippet
+      ;; smart-tab anzu smartparens flx-ido
+      projectile
+      ;; smooth-scrolling keyfreq prodigy ace-jump-mode
+      multiple-cursors
+
+      ;; highlighting
+      idle-highlight-mode highlight-symbol highlight-numbers highlight-quoted
+
+      ;; LaTeX
+      auctex
+
+      ;; org-mode
+      org htmlize gnuplot-mode gnuplot
+
+      ;; config
+      ssh-config-mode
+
+      ;; flycheck
+      flycheck flycheck-tip
+
+      ;; clojure
+      clojure-mode clojure-mode-extra-font-locking cider paredit paren-face
+
+      ;; ruby
+      ;; ruby-mode ruby-test-mode inf-ruby puppet-mode rbenv chruby
+
+      ;; emacs-lisp
+      elisp-slime-nav paredit
+
+      ;; markup language
+      markdown-mode markdown-mode+ yaml-mode 
+
+      ;; git
+      magit ;;git-gutter git-timemachine magit-gh-pulls with-editor git-annex
+      ))
+
+  (dolist (pack smd/install-packages)
+    (unless (package-installed-p pack)
+      (package-install pack)))
+
+  ;; Load use-package, used for loading packages everywhere else
+  (require 'use-package)
+  ;; Set to t to debug package loading
+  (setq use-package-verbose nil)
+#+END_SRC
+
+
+
+
+
+** Basics and settings used everywhere
+Mostly settings that don't fit in elsewhere, so they end up here. However, this
+does include settings that aren't part of packages and need to configure Emacs'
+built-in packages.
+
+*** General settings
+Turn on debugging, it will be turned off at the end. In case something happens
+during loading that breaks something, it's nice to have a debug information.
+
+#+BEGIN_SRC emacs-lisp
+(setq debug-on-error t)
+#+END_SRC
+
+Don't make me type "yes" at a prompt
+
+#+BEGIN_SRC emacs-lisp
+(fset 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+
+# (setq confirm-nonexistent-file-or-buffer nil)
+
+Don't show the startup message.
+
+#+BEGIN_SRC emacs-lisp
+(setq inhibit-startup-message t
+      inhibit-startup-echo-area-message t)
+#+END_SRC
+
+Always indent, per mode, on newline.
+
+#+BEGIN_SRC emacs-lisp
+(define-key global-map (kbd "RET") 'newline-and-indent)
+#+END_SRC
+
+Dakrone says: "Always, *always*, prefer UTF-8, anything else is insanity."
+
+#+BEGIN_SRC emacs-lisp
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-language-environment "UTF-8")
+(prefer-coding-system 'utf-8)
+#+END_SRC
+
+Turn on syntax highlighting for all buffers:
+
+#+BEGIN_SRC emacs-lisp
+(global-font-lock-mode t)
+#+END_SRC
+
+We don't really need to garbage collect as frequently as Emacs
+would like to by default, so set the threshold up higher:
+
+#+BEGIN_SRC emacs-lisp
+(setq gc-cons-threshold 50000000)
+;; Allow font-lock-mode to do background parsing
+(setq jit-lock-stealth-time 1
+      jit-lock-stealth-load 200
+      jit-lock-chunk-size 1000
+      jit-lock-defer-time 0.05)
+#+END_SRC
+
+Echo commands I haven't finished quicker than the default of 1 second:
+
+#+BEGIN_SRC emacs-lisp
+(setq echo-keystrokes 0.1)
+#+END_SRC
+
+Don't warn me about large files unless they're at least 25mb:
+
+#+BEGIN_SRC emacs-lisp
+(setq large-file-warning-threshold (* 25 1024 1024))
+#+END_SRC
+
+If you change buffer, or focus, disable the current buffer's mark:
+
+#+BEGIN_SRC emacs-lisp
+(transient-mark-mode t)
+#+END_SRC
+
+Turn off all kinds of modes, I don't need the menu bar, or the tool bar:
+
+#+BEGIN_SRC emacs-lisp
+(when (functionp 'menu-bar-mode)
+  (menu-bar-mode -1))
+(when (functionp 'set-scroll-bar-mode)
+  (set-scroll-bar-mode 'nil))
+(when (functionp 'mouse-wheel-mode)
+  (mouse-wheel-mode -1))
+(when (functionp 'tooltip-mode)
+  (tooltip-mode -1))
+(when (functionp 'tool-bar-mode)
+  (tool-bar-mode -1))
+(when (functionp 'blink-cursor-mode)
+  (blink-cursor-mode -1))
+#+END_SRC
+
+Don't beep. Just don't. Also, don't show the startup message, I
+know Emacs is starting.
+
+#+BEGIN_SRC emacs-lisp
+(setq ring-bell-function (lambda()))
+(setq inhibit-startup-message t
+      initial-major-mode 'fundamental-mode)
+#+END_SRC
+
+Why would you not want to know lines/columns in your mode-line?
+
+#+BEGIN_SRC emacs-lisp
+(line-number-mode 1)
+(column-number-mode 1)
+#+END_SRC
+
+Ignore case when using completion for file names:
+
+#+BEGIN_SRC emacs-lisp
+(setq read-file-name-completion-ignore-case t)
+#+END_SRC
+
+
+#+BEGIN_SRC emacs-lisp
+(defalias 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+
+It's much easier to move around lines based on how they are
+displayed, rather than the actual line. This helps a ton with long
+log file lines that may be wrapped:
+
+#+BEGIN_SRC emacs-lisp
+(setq line-move-visual t)
+#+END_SRC
+
+Set up the fill-column to 80 characters and set tab width to 2
+
+#+BEGIN_SRC emacs-lisp
+(setq-default fill-column 80)
+(setq-default default-tab-width 2)
+(setq-default indent-tabs-mode nil)
+#+END_SRC
+
+It's okay to refer to a file by a symlink:
+
+#+BEGIN_SRC emacs-lisp
+(setq-default find-file-visit-truename nil)
+#+END_SRC
+
+Require a newline at the end of files:
+
+#+BEGIN_SRC emacs-lisp
+(setq require-final-newline t)
+#+END_SRC
+
+Uniquify buffers, using angle brackets, so you get =foo= and
+=foo<2>=:
+
+#+BEGIN_SRC emacs-lisp
+(use-package uniquify
+  :config
+  (setq uniquify-buffer-name-style 'post-forward-angle-brackets))
+#+END_SRC
+
+Search (and search/replace) using regex by default, since that's
+usually what I want to do:
+
+#+BEGIN_SRC emacs-lisp
+  ;; (global-set-key (kbd "C-s") 'isearch-forward-regexp)
+  ;; (global-set-key (kbd "C-r") 'isearch-backward-regexp)
+  ;; (global-set-key (kbd "M-%") 'query-replace-regexp)
+#+END_SRC
+
+Single space still ends a sentence:
+
+#+BEGIN_SRC emacs-lisp
+(setq sentence-end-double-space nil)
+#+END_SRC
+
+Split windows a bit better (don't split horizontally, I have a
+widescreen :P)
+
+#+BEGIN_SRC emacs-lisp
+  ;; (setq split-height-threshold nil)
+  ;; (setq split-width-threshold 180)
+#+END_SRC
+
+Always turn on whitespace mode
+
+#+BEGIN_SRC emacs-lisp
+(whitespace-mode t)
+#+END_SRC
+
+Indicate trailing empty lines in the GUI:
+
+#+BEGIN_SRC emacs-lisp
+(set-default 'indicate-empty-lines t)
+(setq show-trailing-whitespace t)
+#+END_SRC
+
+Seed the random number generator:
+
+#+BEGIN_SRC emacs-lisp
+(random t)
+#+END_SRC
+
+Switch to unified diffs by default:
+
+#+BEGIN_SRC emacs-lisp
+(setq diff-switches "-u")
+#+END_SRC
+
+Bury the =*scratch*= buffer, never kill it:
+
+#+BEGIN_SRC emacs-lisp
+(defadvice kill-buffer (around kill-buffer-around-advice activate)
+  (let ((buffer-to-kill (ad-get-arg 0)))
+    (if (equal buffer-to-kill "*scratch*")
+        (bury-buffer)
+      ad-do-it)))
+#+END_SRC
+
+Prettify all the symbols, if available (an Emacs 24.4 feature):
+
+#+BEGIN_SRC emacs-lisp
+(when (boundp 'global-prettify-symbols-mode)
+  (add-hook 'emacs-lisp-mode-hook
+            (lambda ()
+              (push '("lambda" . ?λ) prettify-symbols-alist)))
+  (add-hook 'clojure-mode-hook
+            (lambda ()
+              (push '("fn" . ?ƒ) prettify-symbols-alist)))
+  (global-prettify-symbols-mode +1))
+#+END_SRC
+
+*** Temporary file settings
+Settings for what to do with temporary files.
+
+#+BEGIN_SRC emacs-lisp
+  ;; put backups in their own place
+  (setq backup-directory-alist
+        `(("." . ,(expand-file-name
+                   (concat user-emacs-directory "backups")))))
+
+  ;; make backups of files, even when they're in version control
+  (setq vc-make-backup-files t)
+
+  ;; savehist
+  ;; (setq savehist-additional-variables
+  ;;       ;; also save my search entries
+  ;;       '(search-ring regexp-search-ring)
+  ;;       savehist-file "~/.emacs.d/savehist")
+  ;; (savehist-mode t)
+  ;; (setq-default save-place t)
+
+  ;; delete-auto-save-files
+  (setq delete-auto-save-files t)
+
+  ;; delete old backups silently
+  (setq delete-old-versions t)
+#+END_SRC
+
+*** Spell check and flyspell settings
+I use hunspell and aspell checking spelling, ignoring words under 3 characters
+and running very quickly. My personal word dictionary is at
+=~/.flydict=.
+
+First, set up some Hunspell things if applicable, falling back to aspell if
+hunspell isn't available:
+
+#+BEGIN_SRC emacs-lisp
+  ;; ;; Standard location of personal dictionary
+  ;; (setq ispell-personal-dictionary "~/.flydict")
+
+  ;; (if (file-exists-p "/usr/local/bin/hunspell")
+  ;;     (progn
+  ;;       ;; Add english-hunspell as a dictionary
+  ;;       (setq-default ispell-program-name "hunspell"
+  ;;                     ispell-dictionary "en_US"))
+  ;;   (progn (setq-default ispell-program-name "aspell")
+  ;;          (setq ispell-extra-args '("--sug-mode=normal" "--ignore=3"))))
+
+  ;; (add-to-list 'ispell-skip-region-alist '("[^\000-\377]+"))
+#+END_SRC
+
+In most non-programming modes, =M-.= can be used to spellcheck the word
+(otherwise it would jump to the definition)
+
+#+BEGIN_SRC emacs-lisp
+  ;; ;; flyspell
+  ;; (use-package flyspell
+  ;;   :diminish "FS"
+  ;;   :config
+  ;;   (define-key flyspell-mode-map (kbd "M-n") 'flyspell-goto-next-error)
+  ;;   (define-key flyspell-mode-map (kbd "M-.") 'ispell-word))
+#+END_SRC
+
+Finally, there are some things I always want spellcheck to ignore, like things
+in org-src blocks and property drawers
+
+#+BEGIN_SRC emacs-lisp
+  ;; (add-to-list 'ispell-skip-region-alist '(":\\(PROPERTIES\\|LOGBOOK\\):" . ":END:"))
+  ;; (add-to-list 'ispell-skip-region-alist '("#\\+BEGIN_SRC" . "#\\+END_SRC"))
+  ;; (add-to-list 'ispell-skip-region-alist '("#\\+BEGIN_EXAMPLE" . "#\\+END_EXAMPLE"))
+#+END_SRC
+
+*** Dired
+Dired is sweet, I require =dired-x= also so I can hit =C-x C-j=
+and go directly to a dired buffer.
+
+Setting =ls-lisp-dirs-first= means directories are always at the
+top. Always copy and delete recursively. Also enable
+=hl-line-mode= in dired, since it's easier to see the cursor then.
+
+To start, a helper to use "=open=" to open files in dired-mode with =M-o=
+(similar to Finder in OSX).
+
+#+BEGIN_SRC emacs-lisp
+(defun my/dired-mac-open ()
+  (interactive)
+  (save-window-excursion
+    (dired-do-async-shell-command
+     "open" current-prefix-arg
+     (dired-get-marked-files t current-prefix-arg))))
+#+END_SRC
+
+And then some other things to setup when dired runs. =C-x C-q= to edit
+writable-dired mode is aawwweeeesssoooommee, it makes renames super easy.
+
+#+BEGIN_SRC emacs-lisp
+(defun my/dired-mode-hook ()
+  (hl-line-mode t)
+  (toggle-truncate-lines 1))
+
+(use-package dired
+  :bind ("C-x C-j" . dired-jump)
+  :config
+  (progn
+    (use-package dired-x
+      :init (setq-default dired-omit-files-p t)
+      :config
+      (when (eq system-type 'darwin)
+        (add-to-list 'dired-omit-extensions ".DS_Store")))
+    (customize-set-variable 'diredp-hide-details-initially-flag nil)
+    (use-package dired+)
+    (use-package dired-aux
+      :init (use-package dired-async))
+    (put 'dired-find-alternate-file 'disabled nil)
+    (setq ls-lisp-dirs-first t
+          dired-recursive-copies 'always
+          dired-recursive-deletes 'always
+          dired-dwim-target t
+          delete-by-moving-to-trash t
+          wdired-allow-to-change-permissions t)
+    (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+    (define-key dired-mode-map (kbd "C-M-u") 'dired-up-directory)
+    (define-key dired-mode-map (kbd "M-o") 'my/dired-mac-open)
+    (define-key dired-mode-map (kbd "C-x C-q") 'wdired-change-to-wdired-mode)
+    (add-hook 'dired-mode-hook #'my/dired-mode-hook)))
+#+END_SRC
+
+*** saveplace
+Navigates back to where you were editing a file next time you open it
+
+#+BEGIN_SRC emacs-lisp
+(use-package saveplace
+  :init
+  (setq-default save-place t)
+  (setq save-place-file (expand-file-name ".places" user-emacs-directory)))
+#+END_SRC
+
+** Programming language-specific configuration
+Configuration options for language-specific packages live here.
+
+*** General prog-mode hooks
+Some general settings that should apply to all programming modes, turning
+on subword mode and idle-highlight-mode:
+
+#+BEGIN_SRC emacs-lisp
+(use-package idle-highlight-mode
+  :init
+  (progn
+    (defun my/idle-highlight-hook ()
+      (interactive)
+      (when (fboundp 'idle-highlight-mode)
+        (idle-highlight-mode t))
+      (setq show-trailing-whitespace t)
+      (subword-mode t))
+
+    (add-hook 'prog-mode-hook #'my/idle-highlight-hook)))
+#+END_SRC
+
+In programming modes, make sure things like FIXME and TODO are
+highlighted so they stand out:
+
+#+BEGIN_SRC emacs-lisp
+(defun my/add-watchwords ()
+  "Highlight FIXME, TODO, and NOCOMMIT in code"
+  (font-lock-add-keywords
+   nil '(("\\<\\(FIXME\\|TODO\\|NOCOMMIT\\)\\>"
+          1 '((:foreground "#d7a3ad") (:weight bold)) t))))
+
+(add-hook 'prog-mode-hook 'my/add-watchwords)
+#+END_SRC
+
+*** Clojure
+Some helper functions for jumping between tests, I prefer
+test/foo.clj instead of foo_test.clj
+
+#+BEGIN_SRC emacs-lisp
+  ;; ;; custom test locations instead of foo_test.clj, use test/foo.clj
+  ;; (defun clojure-test-for-without-test (namespace)
+  ;;   (interactive)
+  ;;   (let* ((namespace (clojure-underscores-for-hyphens namespace))
+  ;;          (segments (split-string namespace "\\."))
+  ;;          (before (subseq segments 0 1))
+  ;;          (after (subseq segments 1))
+  ;;          (test-segments (append before (list "test") after)))
+  ;;     (format "%stest/%s.clj"
+  ;;             (locate-dominating-file buffer-file-name "src/")
+  ;;             (mapconcat 'identity test-segments "/"))))
+
+  ;; (defun clojure-test-implementation-for-without-test (namespace)
+  ;;   (interactive)
+  ;;   (let* ((namespace (clojure-underscores-for-hyphens namespace))
+  ;;          (segments (split-string namespace "\\."))
+  ;;          (before (subseq segments 0 1))
+  ;;          (after (subseq segments 2))
+  ;;          (impl-segments (append before after)))
+  ;;     (format "%s/src/%s.clj"
+  ;;             (locate-dominating-file buffer-file-name "src/")
+  ;;             (mapconcat 'identity impl-segments "/"))))
+#+END_SRC
+
+Other Clojure-specific settings:
+
+#+BEGIN_SRC emacs-lisp
+  (defun smd/clojure-things-hook ()
+    "Set up clojure-y things"
+    (eldoc-mode 1)
+    (subword-mode t)
+    (clj-refactor-mode t)
+    (paredit-mode 1)
+    ;; Some possibly poor choices about paredit
+    ;; (define-key paredit-mode-map (kbd "M-[") nil)
+    ;; (define-key paredit-mode-map (kbd "<C-right>") 'paredit-forward-slurp-sexp)
+    (global-set-key (kbd "C-c t") 'clojure-jump-between-tests-and-code)
+    )
+
+  (use-package clojure-mode
+    :config
+    (progn
+      (add-hook 'clojure-mode-hook 'smd/clojure-things-hook)))
+#+END_SRC
+
+Let's define a couple of helper functions for setting up the cider and
+ac-nrepl packages:
+
+#+BEGIN_SRC emacs-lisp
+(defun smd/setup-cider ()
+  (lambda ()
+    (setq cider-history-file "~/.nrepl-history"
+          cider-hide-special-buffers t
+          cider-repl-history-size 10000
+          cider-prefer-local-resources t
+          cider-popup-stacktraces-in-repl t)
+    (paredit-mode 1)
+    (eldoc-mode 1)))
+#+END_SRC
+
+And then finally use them if cider and ac-nrepl packages are available:
+
+#+BEGIN_SRC emacs-lisp
+(use-package cider
+  :init
+  (progn
+    (add-hook 'cider-mode-hook 'smd/setup-cider)
+    (add-hook 'cider-repl-mode-hook 'smd/setup-cider)
+    (add-hook 'cider-mode-hook 'smd/clojure-things-hook)
+    (add-hook 'cider-repl-mode-hook 'smd/clojure-things-hook)))
+#+END_SRC
+
+** paredit
+Paredit for all the lisps.
+
+#+BEGIN_SRC emacs-lisp
+(use-package paredit
+  :diminish "()"
+  :config
+  (progn
+    (define-key paredit-mode-map (kbd "M-)") 'paredit-forward-slurp-sexp)
+    (define-key paredit-mode-map (kbd "C-(") 'paredit-forward-barf-sexp)
+    (define-key paredit-mode-map (kbd "C-)") 'paredit-forward-slurp-sexp)
+    (define-key paredit-mode-map (kbd ")") 'paredit-close-parenthesis)
+    (define-key paredit-mode-map (kbd "M-\"") 'my/other-window-backwards)))
+#+END_SRC
+
+** projectile
+Per-project navigation
+
+#+BEGIN_SRC emacs-lisp
+(use-package projectile
+  :bind (;;("C-x f" . projectile-find-file)
+         ("C-c p s" . projectile-switch-project)
+         ("C-c p a" . projectile-ag)
+         ("C-c p g" . projectile-grep))
+  :config
+  (progn
+    (defconst projectile-mode-line-lighter " P")))
+#+END_SRC
+
+* Finalizers
+Turn off debugging, now that initialization has ended
+
+#+BEGIN_SRC emacs-lisp
+(setq debug-on-error nil)
+#+END_SRC
