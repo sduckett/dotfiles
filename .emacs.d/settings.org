@@ -14,33 +14,34 @@
 #+STARTUP: align fold nodlcheck lognotestate content
 
 * Foreward
-This is a work in progress, where I attempt to write a literate
-configuration file for Emacs and see how it affects my thinking of the
-system as a whole. Depending on what version of this work you are
-reading, there might be steps that don't work, broken code, and
-descriptions that are hard to follow. Please accept my apologies and
-inform me of any glaring omissions. If anything is gained in the
-process, I will consider it to have been a useful exercise.
 
-This file was last exported: {{{time(%Y-%m-%d %H:%M)}}}
+  This is a work in progress, where I attempt to write a literate configuration
+  file for Emacs and see how it affects my thinking of the system as a whole.
+  Depending on what version of this work you are reading, there might be steps
+  that don't work, broken code, and descriptions that are hard to follow. Please
+  accept my apologies and inform me of any glaring omissions. If anything is
+  gained in the process, I will consider it to have been a useful exercise.
+  
+  This file was last exported: {{{time(%Y-%m-%d %H:%M)}}}
 
 * Introduction
-The idea of writing a literate configuration file was mentioned during
-a recent office-hours chat, but the benefits described were limited to
-one: looking good on Github. I'm not sure I believe it, so I decided
-to give it a try and see if I happen to notice any additional benefits.
 
-To get started, have a look at your `~/.emacs.d/init.el`. If you'd
-done any customizations there, move them to a file (perhaps
-`~/.emacs.d/custom-additions.el`) that you can load after we do some
-setup.
-
-Next, get a list of installed packages (`M-x package-list-packages RET`)
-and search for the set of "Installed" packages (`C-s installed RET`).
-Make a list of the packages you've installed, if any, and put them in
-`~/.emacs.d/packages.el`. (This might come in useful later.)
-
-Put the following in `~/.emacs.d/init.el`:
+  The idea of writing a literate configuration file was mentioned during
+  a recent office-hours chat, but the benefits described were limited to
+  one: looking good on Github. I'm not sure I believe it, so I decided
+  to give it a try and see if I happen to notice any additional benefits.
+  
+  To get started, have a look at your `~/.emacs.d/init.el`. If you'd
+  done any customizations there, move them to a file (perhaps
+  `~/.emacs.d/custom-additions.el`) that you can load after we do some
+  setup.
+  
+  Next, get a list of installed packages (`M-x package-list-packages RET`)
+  and search for the set of "Installed" packages (`C-s installed RET`).
+  Make a list of the packages you've installed, if any, and put them in
+  `~/.emacs.d/packages.el`. (This might come in useful later.)
+  
+  Put the following in `~/.emacs.d/init.el`:
 
 #+BEGIN_SRC
   ;; keep customize settings in their own file
@@ -62,7 +63,7 @@ Put the following in `~/.emacs.d/init.el`:
                      user-emacs-directory))
 #+END_SRC
 
-Next, put the following in `~/.emacs.d/packages.el`:
+  Next, put the following in `~/.emacs.d/packages.el`:
 
 #+BEGIN_SRC emacs-lisp
   (require 'package)
@@ -88,7 +89,7 @@ Next, put the following in `~/.emacs.d/packages.el`:
 
 #+END_SRC
 
-This is the platform from which the rest of the configuration is built.
+  This is the platform from which the rest of the configuration is built.
 
 * Configuration
 ** Packages that need to be installed
@@ -163,15 +164,52 @@ things add hooks that don't work if packages aren't installed.
   ;; Set to t to debug package loading
   (setq use-package-verbose nil)
 #+END_SRC
+** Using org-mode to keep track of things
+*** Basic configuration
+    I like a `docs/` directory in $HOME, so this is where I keep my
+    org files. I'm trying out keeping notes in a single file.
 
+    #+BEGIN_SRC emacs-lisp
+      (setq org-directory "~/docs/org")
+      (setq org-default-notes-file (concat org-directory "/notes.org"))
+    #+END_SRC   
 
+    I would like to be able to keep an agenda and get to it quickly
 
+    #+BEGIN_SRC emacs-lisp
+      (define-key global-map "\C-ca" 'org-agenda)
+    #+END_SRC   
 
+*** Capturing notes quickly
+    `C-c r` is how I'll get to "remembering" a thing.
+
+    #+BEGIN_SRC emacs-lisp
+      (define-key global-map "\C-cr" 'org-capture)
+    #+END_SRC   
+
+    Org is good at helping me keep track of things that I don't want to forget.
+    For example, I make journal entries that are personal, lists of tasks for
+    various projects, and keep a log of my bike rides.
+
+    TODO: I would like my ride log to go under the training log heading.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq org-capture-templates
+            '(
+              ("j" "Journal entry" item
+               (file+datetree "~/docs/org/personal/journal.org")
+               "%?")
+              ("r" "A Bicycle Ride" entry
+               (file+datetree  "~/docs/org/personal/bikes.org")
+               "* %U\n  %?")
+              ))
+    #+END_SRC
 
 ** Basics and settings used everywhere
-Mostly settings that don't fit in elsewhere, so they end up here. However, this
-does include settings that aren't part of packages and need to configure Emacs'
-built-in packages.
+
+   Mostly settings that don't fit in elsewhere, so they end up here. However,
+   this does include settings that aren't part of packages and need to configure
+   Emacs' built-in packages.
 
 *** General settings
 Turn on debugging, it will be turned off at the end. In case something happens
@@ -536,69 +574,59 @@ Navigates back to where you were editing a file next time you open it
 #+END_SRC
 
 ** Programming language-specific configuration
-Configuration options for language-specific packages live here.
+
+   Configuration options for language-specific packages live here.
 
 *** General prog-mode hooks
-Some general settings that should apply to all programming modes, turning
-on subword mode and idle-highlight-mode:
+
+    Some general settings that should apply to all programming modes, turning
+    on subword mode and idle-highlight-mode:
 
 #+BEGIN_SRC emacs-lisp
-(use-package idle-highlight-mode
-  :init
-  (progn
-    (defun my/idle-highlight-hook ()
-      (interactive)
-      (when (fboundp 'idle-highlight-mode)
-        (idle-highlight-mode t))
-      (setq show-trailing-whitespace t)
-      (subword-mode t))
+  (use-package idle-highlight-mode
+    :init
+    (progn
+      (defun smd/idle-highlight-hook ()
+        (interactive)
+        (when (fboundp 'idle-highlight-mode)
+          (idle-highlight-mode t))
+        (setq show-trailing-whitespace t)
+        (subword-mode t))
 
-    (add-hook 'prog-mode-hook #'my/idle-highlight-hook)))
+      (add-hook 'prog-mode-hook #'smd/idle-highlight-hook)))
 #+END_SRC
 
-In programming modes, make sure things like FIXME and TODO are
-highlighted so they stand out:
+    In programming modes, make sure things like FIXME and TODO are
+    highlighted so they stand out:
 
 #+BEGIN_SRC emacs-lisp
-(defun my/add-watchwords ()
+(defun smd/add-watchwords ()
   "Highlight FIXME, TODO, and NOCOMMIT in code"
   (font-lock-add-keywords
    nil '(("\\<\\(FIXME\\|TODO\\|NOCOMMIT\\)\\>"
           1 '((:foreground "#d7a3ad") (:weight bold)) t))))
 
-(add-hook 'prog-mode-hook 'my/add-watchwords)
+(add-hook 'prog-mode-hook 'smd/add-watchwords)
 #+END_SRC
 
-*** Clojure
-Some helper functions for jumping between tests, I prefer
-test/foo.clj instead of foo_test.clj
+*** Paredit
+   
+   Paredit for all the lisps.
 
 #+BEGIN_SRC emacs-lisp
-  ;; ;; custom test locations instead of foo_test.clj, use test/foo.clj
-  ;; (defun clojure-test-for-without-test (namespace)
-  ;;   (interactive)
-  ;;   (let* ((namespace (clojure-underscores-for-hyphens namespace))
-  ;;          (segments (split-string namespace "\\."))
-  ;;          (before (subseq segments 0 1))
-  ;;          (after (subseq segments 1))
-  ;;          (test-segments (append before (list "test") after)))
-  ;;     (format "%stest/%s.clj"
-  ;;             (locate-dominating-file buffer-file-name "src/")
-  ;;             (mapconcat 'identity test-segments "/"))))
-
-  ;; (defun clojure-test-implementation-for-without-test (namespace)
-  ;;   (interactive)
-  ;;   (let* ((namespace (clojure-underscores-for-hyphens namespace))
-  ;;          (segments (split-string namespace "\\."))
-  ;;          (before (subseq segments 0 1))
-  ;;          (after (subseq segments 2))
-  ;;          (impl-segments (append before after)))
-  ;;     (format "%s/src/%s.clj"
-  ;;             (locate-dominating-file buffer-file-name "src/")
-  ;;             (mapconcat 'identity impl-segments "/"))))
+(use-package paredit
+  :diminish "()"
+  :config
+  (progn
+    (define-key paredit-mode-map (kbd "M-)") 'paredit-forward-slurp-sexp)
+    (define-key paredit-mode-map (kbd "C-(") 'paredit-forward-barf-sexp)
+    (define-key paredit-mode-map (kbd "C-)") 'paredit-forward-slurp-sexp)
+    (define-key paredit-mode-map (kbd ")") 'paredit-close-parenthesis)
+    (define-key paredit-mode-map (kbd "M-\"") 'my/other-window-backwards)))
 #+END_SRC
+*** Clojure
 
-Other Clojure-specific settings:
+    Write some helper functions for jumping between tests.
 
 #+BEGIN_SRC emacs-lisp
   (defun smd/clojure-things-hook ()
@@ -610,17 +638,15 @@ Other Clojure-specific settings:
     ;; Some possibly poor choices about paredit
     ;; (define-key paredit-mode-map (kbd "M-[") nil)
     ;; (define-key paredit-mode-map (kbd "<C-right>") 'paredit-forward-slurp-sexp)
-    (global-set-key (kbd "C-c t") 'clojure-jump-between-tests-and-code)
-    )
+    (global-set-key (kbd "C-c t") 'clojure-jump-between-tests-and-code))
 
   (use-package clojure-mode
     :config
-    (progn
-      (add-hook 'clojure-mode-hook 'smd/clojure-things-hook)))
+    (progn (add-hook 'clojure-mode-hook 'smd/clojure-things-hook)))
 #+END_SRC
 
-Let's define a couple of helper functions for setting up the cider and
-ac-nrepl packages:
+    Let's define a couple of helper functions for setting up the cider and
+    ac-nrepl packages:
 
 #+BEGIN_SRC emacs-lisp
 (defun smd/setup-cider ()
@@ -634,7 +660,7 @@ ac-nrepl packages:
     (eldoc-mode 1)))
 #+END_SRC
 
-And then finally use them if cider and ac-nrepl packages are available:
+    And then finally use them if cider and ac-nrepl packages are available:
 
 #+BEGIN_SRC emacs-lisp
 (use-package cider
@@ -646,23 +672,9 @@ And then finally use them if cider and ac-nrepl packages are available:
     (add-hook 'cider-repl-mode-hook 'smd/clojure-things-hook)))
 #+END_SRC
 
-** paredit
-Paredit for all the lisps.
+** Projectile
 
-#+BEGIN_SRC emacs-lisp
-(use-package paredit
-  :diminish "()"
-  :config
-  (progn
-    (define-key paredit-mode-map (kbd "M-)") 'paredit-forward-slurp-sexp)
-    (define-key paredit-mode-map (kbd "C-(") 'paredit-forward-barf-sexp)
-    (define-key paredit-mode-map (kbd "C-)") 'paredit-forward-slurp-sexp)
-    (define-key paredit-mode-map (kbd ")") 'paredit-close-parenthesis)
-    (define-key paredit-mode-map (kbd "M-\"") 'my/other-window-backwards)))
-#+END_SRC
-
-** projectile
-Per-project navigation
+   Per-project navigation. How does this even work?
 
 #+BEGIN_SRC emacs-lisp
 (use-package projectile
