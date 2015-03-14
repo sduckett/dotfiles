@@ -174,7 +174,7 @@ things add hooks that don't work if packages aren't installed.
       (setq org-default-notes-file (concat org-directory "/notes.org"))
     #+END_SRC   
 
-    I would like to be able to keep an agenda and get to it quickly
+    I would like to be able to keep an agenda and get to it quickly.
 
     #+BEGIN_SRC emacs-lisp
       (define-key global-map "\C-ca" 'org-agenda)
@@ -196,11 +196,17 @@ things add hooks that don't work if packages aren't installed.
     #+BEGIN_SRC emacs-lisp
       (setq org-capture-templates
             '(
+              ("t" "TODO item" entry
+               (file+headline "~/docs/org/tasks.org" "new tasks")
+               "* TODO: %?")
               ("j" "Journal entry" item
                (file+datetree "~/docs/org/personal/journal.org")
                "%?")
               ("r" "A Bicycle Ride" entry
                (file+datetree  "~/docs/org/personal/bikes.org")
+               "* %U\n  %?")
+              ("m" "Meetup note" entry
+               (file+headline  "~/docs/org/personal/meetups.org" "Tasks")
                "* %U\n  %?")
               ))
     #+END_SRC
