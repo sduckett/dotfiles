@@ -1,3 +1,10 @@
 .mc-lists.el
 elpa/*
 projectile-bookmarks.eld
+bookmarks
+el-get/
+places
+.places
+/ac-comphist.dat
+ido.last
+settings.el
