@@ -1,5 +1,5 @@
 [general]
-ui = Quiet
+ui = TTYUI
 accounts = SeanDuckett
 fsync = False
 pythonfile = ~/.mutt/offlineimap.py
