@@ -1,5 +1,3 @@
-ce
-
 ;; This file is NOT part of GNU Emacs.
 
 ;;; Commentary:
@@ -34,8 +32,8 @@ ce
 ;;;###autoload
 (progn
   (require 'better-defaults)
-
-
+  ;; The cool stuff goes here.
   )
+
 (provide 'baquah-defaults)
 ;;; baquah-defaults.el ends here
