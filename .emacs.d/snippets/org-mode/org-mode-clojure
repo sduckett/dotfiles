@@ -1,0 +1,8 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: org-mode-clojure
+# key: C-c C-s c
+# binding: direct-keybinding
+# --
+#+BEGIN_SRC clojure
+
+#+END_SRC

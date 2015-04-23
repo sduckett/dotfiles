@@ -1,0 +1,17 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: GEOJSON Feature
+# key: GEOJSON
+# binding: direct-keybinding
+# --
+{
+    "type": "Feature",
+    "properties": {
+        "name": "$1",
+        "amenity": "$2",
+        "comments": "$3"
+    },
+    "geometry": {
+        "type": "Point",
+        "coordinates": [$4, $5]
+    }
+}
