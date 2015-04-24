@@ -1,0 +1,32 @@
+alias "em=emacsclient -t"
+alias "diff=gdiff"
+
+#
+# Regularly used applications (annoying classpaths, etc..)
+#
+alias "vidcap=ffmpeg -f x11grab -s wxga -r 25 -i :0.0 -sameq /tmp/out.mpg"
+alias "ls=ls -htrF --color=auto"
+
+#
+# Common laptop display changes
+#
+alias "dhead-vga=xrandr --output VGA1 --auto --right-of LVDS1"
+alias "clone-vga=xrandr --output VGA1 --auto --same-as LVDS1"
+alias "big-above=xrandr --output LVDS1 --preferred --output DP1 --preferred --above LVDS1"
+alias "big-same=xrandr --output LVDS1 --preferred --output DP1 --preferred --same-as LVDS1"
+alias "onescreen=xrandr --output LVDS1 --preferred --output DP1 --off --output VGA1 --off"
+
+#
+# Filesystem movement tricks.
+# Avoid typing cd ../../ for going two dirs down and so on
+#
+alias -g '...'='../..'
+alias -g '....'='../../..'
+alias -g '.....'='../../../..'
+alias -g '......'='../../../../..'
+alias -g '.......'='../../../../../..'
+
+alias "rb2=rbenv local 2.1.2"
+alias "rb1=rbenv local 1.9.3"
+alias "tweet= t update"
+alias "mavis=gtypist -bw"
