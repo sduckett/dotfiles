@@ -26,3 +26,8 @@ tiny embedded system with no network access.
 ## TODO
 
 1. write a Makefile and whatever tools make it easy to get a system online QUICKLY.
+
+## Tmux Plugins
+
+There is a git submodule for tpm. Run `git submodule init` to clone the repository, then make a symlink: ln -sf dotfiles-dir/tpm ~/.tmux/plugins/tpm
+Once you get the symlink garbage sorted out, reload your tmux configuration `tmux source-file ~/.tmux.conf`
