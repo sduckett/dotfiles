@@ -1,3 +1,4 @@
 *~
 #*#
 *.gpg
+.emacs.d/var
