@@ -25,7 +25,7 @@ set thorough_search      # strip headers and eval mimes before searching
 # Sidebar Patch --------------------------------------
 set sidebar_delim   = '  │'
 set sidebar_visible = yes
-set sidebar_width   = 24
+set sidebar_width   = 45
 
 color sidebar_new color221 color233
 color header red default "^Importance: high"
@@ -60,8 +60,6 @@ alternates sean@hungryllama.net
 # Mailboxes to show in the sidebar.
 mailboxes +sduckett-gmail.com/INBOX \
           +sduckett-gmail.com/clojure \
-          +sduckett-gmail.com/archive \
-          +sduckett-gmail.com/sent \
           +sduckett-gmail.com/drafts \
 
 # Other special folders.
