@@ -168,6 +168,13 @@ things add hooks that don't work if packages aren't installed.
       (define-key global-map "\C-ca" 'org-agenda)
     #+END_SRC
 
+    I like a few different agenda files
+
+    #+BEGIN_SRC emacs-lisp
+      (setq org-agenda-files
+            '("~/docs/org/personal/meetups.org" "~/docs/org/tasks.org" "~/docs/org/work/lfo.org"))
+    #+END_SRC
+
     I would like to automatically count words - helps for writing
 
     #+begin_src emacs-lisp :tangle yes
@@ -285,12 +292,6 @@ during loading that breaks something, it's nice to have debug information.
 (setq debug-on-error t)
 #+END_SRC
 
-Don't make me type "yes" at a prompt
-
-#+BEGIN_SRC emacs-lisp
-(fset 'yes-or-no-p 'y-or-n-p)
-#+END_SRC
-
 Don't show the startup message.
 
 #+BEGIN_SRC emacs-lisp
@@ -323,12 +324,6 @@ Turn on syntax highlighting for all buffers:
 
 #+BEGIN_SRC emacs-lisp
 (global-font-lock-mode t)
-#+END_SRC
-
-Echo commands I haven't finished quicker than the default of 1 second:
-
-#+BEGIN_SRC emacs-lisp
-(setq echo-keystrokes 0.1)
 #+END_SRC
 
 Don't warn me about large files unless they're at least 25mb:
@@ -373,17 +368,10 @@ Ignore case when using completion for file names:
 (setq read-file-name-completion-ignore-case t)
 #+END_SRC
 
+Don't make me type "yes" at a prompt
 
 #+BEGIN_SRC emacs-lisp
 (defalias 'yes-or-no-p 'y-or-n-p)
-#+END_SRC
-
-It's much easier to move around lines based on how they are
-displayed, rather than the actual line. This helps a ton with long
-log file lines that may be wrapped:
-
-#+BEGIN_SRC emacs-lisp
-(setq line-move-visual t)
 #+END_SRC
 
 Set up the fill-column to 80 characters and set tab width to 2
@@ -459,11 +447,16 @@ Prettify all the symbols, if available (an Emacs 24.4 feature):
   (global-prettify-symbols-mode +1))
 #+END_SRC
 
-*** Spell check and flyspell settings
-I don't have any preferences about spelcecking yet.
+*** Setup Ido Mode for fancy customizations
 
-*** Dired
-I don't have any dired preferences yet.
+Use ido-mode everywhere! See https://www.masteringemacs.org/article/introduction-to-ido-mode
+
+#+BEGIN_SRC emacs-lisp
+(ido-mode 1)
+(setq ido-enable-flex-matching t)
+(setq ido-create-new-buffer 'always)
+(setq ido-everywhere t)
+#+END_SRC
 
 *** saveplace
 Navigates back to where you were editing a file next time you open it
@@ -531,8 +524,7 @@ Navigates back to where you were editing a file next time you open it
     (define-key paredit-mode-map (kbd "M-)") 'paredit-forward-slurp-sexp)
     (define-key paredit-mode-map (kbd "C-(") 'paredit-forward-barf-sexp)
     (define-key paredit-mode-map (kbd "C-)") 'paredit-forward-slurp-sexp)
-    (define-key paredit-mode-map (kbd ")") 'paredit-close-parenthesis)
-    (define-key paredit-mode-map (kbd "M-\"") 'my/other-window-backwards)))
+    (define-key paredit-mode-map (kbd ")") 'paredit-close-parenthesis)))
 #+END_SRC
 *** Clojure
 
@@ -546,11 +538,18 @@ Navigates back to where you were editing a file next time you open it
   (defun smd/clojure-things-hook ()
     "Set up clojure-y things"
     (eldoc-mode 1)
+
     (subword-mode t)
+
     (clj-refactor-mode t)
+    (cljr-add-keybindings-with-prefix "C-c C-m")
+
+    ;; (auto-complete-mode t)
+    ;; (rainbow-delimiters-mode t)
+
     (paredit-mode 1)
-    ;; Some possibly poor choices about paredit
-    ;; (define-key paredit-mode-map (kbd "M-[") nil)
+    ;; NOTE: These are possibly wonky settings...
+    (define-key paredit-mode-map (kbd "M-[") nil)
     (define-key paredit-mode-map (kbd "<C-right>") 'paredit-forward-slurp-sexp))
 
   (use-package clojure-mode
@@ -641,6 +640,19 @@ Navigates back to where you were editing a file next time you open it
     (jj-cider-eval-last-sexp))
 #+END_SRC
 
+Write backup files to own directory
+
+#+BEGIN_SRC emacs-lisp
+(setq backup-directory-alist
+      `(("." . ,(expand-file-name
+                 (concat user-emacs-directory "backups")))))
+#+END_SRC
+
+Make backups of files, even when they're in version control
+#+BEGIN_SRC emacs-lisp
+(setq vc-make-backup-files t)
+#+END_SRC
+
 ** Projectile
 
 Always use Projectile because turning it on for specific things is annoying.
@@ -683,6 +695,23 @@ I can make a geojson snippet with this:
   }
 #+end_src
 
+** Misc editing functions
+
+Some IDEs (like RubyMine and IntelliJ) let you put a newline above the point.
+This is a shot at getting that behavior in Emacs.
+
+#+BEGIN_SRC emacs-lisp
+  (defun smd/smart-open-line-above ()
+    "Insert an empty line above the current line.
+    Position the cursor at it's beginning, according to the current mode."
+    (interactive)
+    (move-beginning-of-line nil)
+    (newline-and-indent)
+    (forward-line -1)
+    (indent-according-to-mode))
+
+  (global-set-key [(control shift return)] 'smd/smart-open-line-above)
+#+END_SRC
 
 * Finalizers
 Turn off debugging, now that initialization has ended
