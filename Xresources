@@ -10,6 +10,8 @@ URxvt.boldFont:         xft:Inconsolata\-dz for Powerline:bold:pixelsize=16:anti
 !URxvt.iso14755 : false
 
 
+URxvt.iso14755: false
+URxvt.iso14755_52: false
 !-------------------------------------------------------------------------------
 ! URxvt settings
 ! Colours lifted from Solarized (http://ethanschoonover.com/solarized)
