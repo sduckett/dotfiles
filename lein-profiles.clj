@@ -25,7 +25,7 @@
          ;; Read the friendly source-code
          [lein-ubersource "0.1.1"]          ;; https://github.com/puppetlabs/lein-ubersource
          [thalia "0.1.0"]                   ;; https://github.com/jafingerhut/thalia
-         [lein-marginalia "0.8.0"]          ;; https://github.com/gdeer81/lein-marginalia]
+         [lein-marginalia "0.8.0"]]         ;; https://github.com/gdeer81/lein-marginalia]
 
          :dependencies [[org.clojure/tools.nrepl "0.2.10"]
                         [pjstadig/humane-test-output "0.7.0"]]
@@ -39,8 +39,4 @@
                    "rtfs" ["do"
                            ["clean"]
                            ["ubersource"]
-                           ["marg"]]
-                   }
-         }
-        }
- }
+                           ["marg"]]}}}
