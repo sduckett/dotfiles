@@ -28,10 +28,25 @@
          [lein-marginalia "0.8.0"]]         ;; https://github.com/gdeer81/lein-marginalia]
 
          :dependencies [[org.clojure/tools.nrepl "0.2.10"]
-                        [pjstadig/humane-test-output "0.7.0"]]
+                        [pjstadig/humane-test-output "0.7.0"]
+                        [im.chit/vinyasa "0.1.8"]
+                        [spyscope "0.1.5"]
+                        [thalia "0.1.0"]
+                        [org.clojure/tools.namespace "0.2.11"]]
 
-         :injections [(require 'pjstadig.humane-test-output)
-                      (pjstadig.humane-test-output/activate!)]
+        :injections [(require 'clojure.tools.namespace.repl)
+                     (require 'pjstadig.humane-test-output)
+                     (require 'spyscope.core)
+                     (require 'vinyasa.inject)
+                     (require 'thalia.doc)
+
+                     (pjstadig.humane-test-output/activate!)
+                     (vinyasa.inject/inject 'clojure.core '>
+                                            '[[clojure.repl doc source]
+                                              [clojure.pprint pprint pp]
+                                              [vinyasa.pull pull]
+                                              [clojure.tools.namespace.repl refresh]])
+]
 
          :aliases {"sanity-check" ["do"
                                    ["clean"]
