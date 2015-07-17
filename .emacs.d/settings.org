@@ -100,47 +100,14 @@ things add hooks that don't work if packages aren't installed.
 
 #+BEGIN_SRC emacs-lisp
   (defvar smd/install-packages
-    '(
-      ;; package management
-      use-package
-
-      ;; misc
-      gist
-
-      ;; for auto-complete
-      fuzzy popup company
-
-      ;; editing utilities
-      expand-region smex ag ;;undo-tree iedit ido-ubiquitous ido-vertical-mode
+    '(use-package gist fuzzy popup company expand-region smex ido-vertical-mode ido-ubiquitous
       yasnippet projectile multiple-cursors ace-jump-mode
-
-      ;; highlighting
       idle-highlight-mode highlight-symbol highlight-numbers highlight-quoted
-
-      ;; org-mode
-      org htmlize gnuplot-mode gnuplot
-
-      ;; config
-      ssh-config-mode
-
-      ;; flycheck
-      flycheck flycheck-tip
-
-      ;; clojure
+      org htmlize gnuplot-mode gnuplot wc-mode ssh-config-mode flycheck flycheck-tip
       clojure-mode clojure-mode-extra-font-locking cider paredit paren-face
-
-      ;; ruby
       ;; ruby-mode ruby-test-mode inf-ruby puppet-mode rbenv chruby
-
-      ;; emacs-lisp
-      elisp-slime-nav paredit
-
-      ;; markup language
-      markdown-mode markdown-mode+ yaml-mode
-
-      ;; git
-      magit git-gutter ;;git-timemachine magit-gh-pulls with-editor git-annex
-      ))
+      elisp-slime-nav paredit markdown-mode markdown-mode+ yaml-mode
+      magit git-gutter git-timemachine magit-gh-pulls with-editor git-annex))
 
   (dolist (pack smd/install-packages)
     (unless (package-installed-p pack)
@@ -543,15 +510,37 @@ Oh, this is somewhat hellish, but there are a few things going on here:
 
             (setq x (+ x 1))))))
 #+END_SRC
+*** SMEX
+
+https://github.com/nonsequitur/smex
+
+#+BEGIN_SRC emacs-lisp
+  (smex-initialize)
+
+  (global-set-key (kbd "M-x") 'smex)
+  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+
+  ;; This is your old M-x.
+  (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+#+END_SRC
+
 *** Setup Ido Mode for fancy customizations
 
 Use ido-mode everywhere! See https://www.masteringemacs.org/article/introduction-to-ido-mode
 
 #+BEGIN_SRC emacs-lisp
-(ido-mode 1)
-(setq ido-enable-flex-matching t)
-(setq ido-create-new-buffer 'always)
-(setq ido-everywhere t)
+  (require 'ido-vertical-mode)
+  (require 'ido-ubiquitous)
+
+  (ido-mode 1)
+  (ido-everywhere 1)
+  (ido-ubiquitous-mode 1)
+  (ido-vertical-mode 1)
+
+  (setq ido-vertical-define-keys 'C-n-and-C-p-only)
+  (setq ido-enable-flex-matching t)
+  (setq ido-create-new-buffer 'always)
+
 #+END_SRC
 
 *** saveplace
@@ -564,12 +553,39 @@ Navigates back to where you were editing a file next time you open it
   (setq save-place-file (expand-file-name ".places" user-emacs-directory)))
 #+END_SRC
 
+** Ace Jump Mode
+
+From <https://github.com/winterTTr/ace-jump-mode>, we get a nice way to jump quickly around a buffer.
+For a demo, watch the Emacs Rocks video: <https://www.youtube.com/watch?v=UZkpmegySnc>
+
+#+BEGIN_SRC emacs-lisp
+  (autoload
+    'ace-jump-mode
+    "ace-jump-mode"
+    "Emacs quick move minor mode"
+    t)
+
+  ;; you can select the key you prefer to
+  (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+
+  (autoload
+    'ace-jump-mode-pop-mark
+    "ace-jump-mode"
+    "Ace jump back:-)"
+    t)
+  (eval-after-load "ace-jump-mode"
+    '(ace-jump-mode-enable-mark-sync))
+  (define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
+
+
+#+END_SRC
+
 ** Multiple Cursors
 
 I like this, having learned about it in Sublime Text and the IntelliJ family of editors.
 
 #+BEGIN_SRC emacs-lisp
-  (require 'mutliple-cursors)
+  (require 'multiple-cursors)
 
   (global-set-key (kbd "C-c e") 'mc/edit-lines)
   (global-set-key (kbd "C-<down>") 'mc/mark-next-like-this)
@@ -645,17 +661,15 @@ I like this, having learned about it in Sublime Text and the IntelliJ family of 
 #+BEGIN_SRC emacs-lisp
   (defun smd/clojure-things-hook ()
     "Set up clojure-y things"
-    (eldoc-mode 1)
 
+    (paredit-mode 1)
     (subword-mode t)
+
+    (company-mode 1)
 
     (clj-refactor-mode t)
     (cljr-add-keybindings-with-prefix "C-c C-m")
 
-    ;; (auto-complete-mode t)
-    ;; (rainbow-delimiters-mode t)
-
-    (paredit-mode 1)
     ;; NOTE: These are possibly wonky settings...
     (define-key paredit-mode-map (kbd "M-[") nil)
     (define-key paredit-mode-map (kbd "<C-right>") 'paredit-forward-slurp-sexp))
@@ -666,86 +680,36 @@ I like this, having learned about it in Sublime Text and the IntelliJ family of 
 #+END_SRC
 
     Let's define a couple of helper functions for setting up the cider and
-    ac-nrepl packages:
+    autocomplete packages:
 
 #+BEGIN_SRC emacs-lisp
-(defun smd/setup-cider ()
-  (lambda ()
-    (setq cider-history-file "~/.nrepl-history"
-          cider-hide-special-buffers t
-          cider-repl-history-size 10000
-          cider-prefer-local-resources t
-          cider-popup-stacktraces-in-repl t)
-    (paredit-mode 1)
-    (eldoc-mode 1)))
+  (defun smd/setup-cider ()
+    (lambda ()
+      (setq cider-history-file "~/.nrepl-history"
+            cider-hide-special-buffers t
+            cider-repl-history-size 10000
+            cider-prefer-local-resources t
+            cider-popup-stacktraces-in-repl t
+            nrepl-log-messages nil
+            cider-repl-history-file "src/cider-repl.log")
+      (paredit-mode 1)
+      (eldoc-mode 1)
+      (add-hook 'cider-repl-mode-hook #'company-mode)
+      (add-hook 'cider-mode-hook #'company-mode)))
 #+END_SRC
 
-    And then finally use them if cider and ac-nrepl packages are available:
+    And then finally use them
 
 #+BEGIN_SRC emacs-lisp
-(use-package cider
-  :init
-  (progn
-    (add-hook 'cider-mode-hook 'smd/setup-cider)
-    (add-hook 'cider-repl-mode-hook 'smd/setup-cider)
-    (add-hook 'cider-mode-hook 'smd/clojure-things-hook)
-    (add-hook 'cider-repl-mode-hook 'smd/clojure-things-hook)))
-#+END_SRC
-
-    Here we test out inserting clojure evaluations into the current buffer
-
-#+BEGIN_SRC emacs-lisp
-  (defun jj-cider-eval-and-get-value (v)
-    (let ((nrepl-sync-request-timeout nil))
-    (nrepl-dict-get (nrepl-sync-request:eval v) "value")))
-
-  (defun jj-cider-interactive-eval-print (form)
-    "Evaluate the given FORM and print value in current buffer."
-    (let ((buffer (current-buffer)))
-      (cider-eval form
-                  (cider-eval-print-handler buffer)
-                  (cider-current-ns))))
-
-  (defun jj-cider-eval-last-sexp-and-append ()
-    "Evaluate the expression preceding point and append result."
-    (interactive)
-    (let ((last-sexp (cider-last-sexp)))
-      ;; we have to be sure the evaluation won't result in an error
-      (jj-cider-eval-and-get-value last-sexp)
-      (with-current-buffer (current-buffer)
-        (insert ";;=>\n"))
-      (jj-cider-interactive-eval-print last-sexp)))
-
-
-  (defun jj-cider-format-with-out-str-pprint-eval (form)
-    "Return a string of Clojure code that will return pretty-printed FORM."
-    (format "(clojure.core/let [x %s] (with-out-str (clojure.pprint/pprint x)))"
-        form))
-
-
-  (defun jj-cider-eval-last-sexp-and-pprint-append ()
-    "Evaluate the expression preceding point and append pretty-printed result."
-    (interactive)
-    (let ((last-sexp (cider-last-sexp)))
-      ;; we have to be sure the evaluation won't result in an error
-      (with-current-buffer (current-buffer)
-        (insert (concat "\n;;=>\n"
-                        (read
-                          (jj-cider-eval-and-get-value
-                           (jj-cider-format-with-out-str-pprint-eval last-sexp))))))))
-
-  (defun jj-cider-eval-last-sexp ()
-    "Evaluate the expression preceding point and show pretty-printed result in minibuffer"
-    (interactive)
-    (let ((last-sexp (cider-last-sexp)))
-      (message (read
-                (jj-cider-eval-and-get-value
-                 (jj-cider-format-with-out-str-pprint-eval last-sexp))))))
-
-  (defun jj-cider-move-forward-and-eval ()
-    (interactive)
-    (paredit-forward)
-    (jj-cider-eval-last-sexp))
+  (use-package cider
+    :init
+    (progn
+      (add-hook 'cider-mode-hook 'smd/setup-cider)
+      (add-hook 'cider-repl-mode-hook 'smd/setup-cider)
+      (add-hook 'cider-mode-hook 'smd/clojure-things-hook)
+      (add-hook 'cider-repl-mode-hook 'smd/clojure-things-hook)
+      ;; (setq company-idle-delay nil) ; never start completions automatically
+      (global-set-key (kbd "M-TAB") #'company-complete)))
 #+END_SRC
 
 Write backup files to own directory
