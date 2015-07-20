@@ -142,12 +142,6 @@ things add hooks that don't work if packages aren't installed.
             '("~/docs/org/personal/meetups.org" "~/docs/org/tasks.org" "~/docs/org/work/lfo.org"))
     #+END_SRC
 
-    I would like to automatically count words - helps for writing
-
-    #+begin_src emacs-lisp :tangle yes
-      (add-hook 'org-mode-hook 'wc-mode)
-    #+end_src
-
     Keep timestamps in a drawer
 
     #+BEGIN_SRC emacs-lisp
