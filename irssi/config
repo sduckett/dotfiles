@@ -15,6 +15,17 @@ servers = (
     use_ssl = "yes";
     ssl_capath = "/etc/ssl/certs";
     autoconnect = "yes";
+  },
+  {
+    address = "irc.gitter.im";
+    chatnet = "Gitter";
+    port = "6667";
+    use_ssl = "yes";
+    ssl_verify = "yes";
+    ssl_capath = "/etc/ssl/certs";
+    autoconnect = "yes";
+    nick = "sduckett";
+    password = "53cr37";
   }
 );
 
@@ -26,6 +37,7 @@ chatnets = {
     max_whois = "30";
   };
   Hungryllama = { type = "IRC"; };
+  Gitter = { type = "IRC"; };
 };
 
 statusbar = {
