@@ -587,6 +587,17 @@ I like this, having learned about it in Sublime Text and the IntelliJ family of 
   (global-set-key (kbd "C-c C-<down>") 'mc/mark-all-like-this)
 #+END_SRC
 
+** Version Control
+
+Most of the time, I use git for version control, so it's nice to be able to look
+at diffs and make commtits without having to leave Emacs. [[http://magit.vc/][Magit]] fills this niche
+pretty well, but for some reason some of the basic commands aren't bound for
+me...
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x g") 'magit-status)
+#+END_SRC
+
 ** Programming language-specific configuration
 
    Configuration options for language-specific packages live here.
