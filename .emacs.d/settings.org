@@ -730,6 +730,19 @@ Make backups of files, even when they're in version control
 (setq vc-make-backup-files t)
 #+END_SRC
 
+** SQL things
+
+Sometimes it is nice to be able to connect to a relational database for some
+development of an idea. Since I tend to use PostgreSQL, sql-postgres can be
+configured:
+
+#+begin_src emacs-lisp :tangle yes
+  (setq sql-postgres-login-params
+        '((user :default "smd")
+          (database :default "postgres")
+          (server :default "localhost")
+          (port :default 5432)))
+#+end_src
 ** Projectile
 
 Always use Projectile because turning it on for specific things is annoying.

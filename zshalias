@@ -30,3 +30,5 @@ alias "rb2=rbenv local 2.1.2"
 alias "rb1=rbenv local 1.9.3"
 alias "tweet= t update"
 alias "mavis=gtypist -bw"
+
+alias "pg-user=sudo -i -u postgres"
