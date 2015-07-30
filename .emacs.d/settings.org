@@ -77,14 +77,8 @@
   (add-to-list 'package-archives
                '("melpa-stable" . "http://stable.melpa.org/packages/"))
 
-  (defvar my-packages '(better-defaults paredit idle-highlight-mode ido-ubiquitous
-                        find-file-in-project magit smex scpaste clojure-mode))
-
-  (dolist (p my-packages)
-    (when (not (package-installed-p p))
-          (package-install p)))
-
   (package-initialize)
+  (package-refresh-contents)
   (setq package-enable-at-startup nil)
 
 #+END_SRC
@@ -99,7 +93,24 @@ This is code that installs packages before any config is loaded, since a lot of
 things add hooks that don't work if packages aren't installed.
 
 #+BEGIN_SRC emacs-lisp
-  (defvar smd/install-packages
+  (require 'package)
+
+  (when (< emacs-major-version 24)
+    (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+
+  (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+  (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
+
+  (add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
+  (add-to-list 'package-pinned-packages '(clj-refactor . "melpa-stable") t)
+
+  (package-initialize)
+
+  ;; (setq package-enable-at-startup nil)
+
+  (defvar smd/packages-to-install
     '(use-package gist fuzzy popup company expand-region smex ido-vertical-mode ido-ubiquitous
       yasnippet projectile multiple-cursors ace-jump-mode
       idle-highlight-mode highlight-symbol highlight-numbers highlight-quoted
@@ -109,9 +120,9 @@ things add hooks that don't work if packages aren't installed.
       elisp-slime-nav paredit markdown-mode markdown-mode+ yaml-mode
       magit git-gutter git-timemachine magit-gh-pulls with-editor git-annex))
 
-  (dolist (pack smd/install-packages)
-    (unless (package-installed-p pack)
-      (package-install pack)))
+  (dolist (package smd/packages-to-install)
+    (unless (package-installed-p package)
+      (package-install package)))
 
   ;; Load use-package, used for loading packages everywhere else
   (require 'use-package)
