@@ -1,34 +1,34 @@
-alias "em=emacsclient -t"
-alias "diff=gdiff"
-
 #
-# Regularly used applications (annoying classpaths, etc..)
+# Silly defaults for system tools
 #
-alias "vidcap=ffmpeg -f x11grab -s wxga -r 25 -i :0.0 -sameq /tmp/out.mpg"
 alias "ls=ls -htrF --color=auto"
-
 #
-# Common laptop display changes
+# A crutch, to be used when a virtual machine hasn't been configured yet.
 #
-alias "dhead-vga=xrandr --output VGA1 --auto --right-of LVDS1"
-alias "clone-vga=xrandr --output VGA1 --auto --same-as LVDS1"
-alias "big-above=xrandr --output LVDS1 --preferred --output DP1 --preferred --above LVDS1"
-alias "big-same=xrandr --output LVDS1 --preferred --output DP1 --preferred --same-as LVDS1"
-alias "onescreen=xrandr --output LVDS1 --preferred --output DP1 --off --output VGA1 --off"
-
-#
-# Filesystem movement tricks.
-# Avoid typing cd ../../ for going two dirs down and so on
-#
-alias -g '...'='../..'
-alias -g '....'='../../..'
-alias -g '.....'='../../../..'
-alias -g '......'='../../../../..'
-alias -g '.......'='../../../../../..'
-
 alias "rb2=rbenv local 2.1.2"
 alias "rb1=rbenv local 1.9.3"
-alias "tweet= t update"
+#
+# Sundries and notions to distract
+#
+alias "tweet=t update"
 alias "mavis=gtypist -bw"
-
+#
+# Getting Real Work™ done
+#
+alias "em=emacsclient -t"
 alias "pg-user=sudo -i -u postgres"
+alias "diff=gdiff"
+#
+# Screencast tools
+#
+alias "screencast=ffmpeg -f x11grab -r 25 -s 1366x768 -i :0.0 -vcodec huffyuv -an ./screencast.avi"
+alias "screencast2mp2=ffmpeg -i ./screencast.avi -f mpeg2video -sameq ./mpeg2.mpg"
+alias "screencast4win=mencoder -forceidx -mc 0 -noskip -skiplimit 0 -ovc lavc -lavcopts vcodec=msmpeg4v2:vhq -o ./windows_mpeg4.avi ./mpeg2.mpg"
+#
+# Display outputs
+#
+alias "vga-above=xrandr --output VGA1 --auto --above LVDS1"
+alias "vga-cloned=xrandr --output VGA1 --auto --same-as LVDS1"
+alias "dp-above=xrandr --output LVDS1 --preferred --output DP1 --preferred --above LVDS1"
+alias "dp-cloned=xrandr --output LVDS1 --preferred --output DP1 --preferred --same-as LVDS1"
+alias "onescreen=xrandr --output LVDS1 --preferred --output DP1 --off --output VGA1 --off"
