@@ -9,14 +9,6 @@ servers = (
     autoconnect = "no";
   },
   {
-    address = "hungryllama.net";
-    chatnet = "Hungryllama";
-    port = "32769";
-    use_ssl = "yes";
-    ssl_capath = "/etc/ssl/certs";
-    autoconnect = "yes";
-  },
-  {
     address = "irc.gitter.im";
     chatnet = "Gitter";
     port = "6667";
