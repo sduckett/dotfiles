@@ -32,9 +32,8 @@ source ~/.zshalias
 
 JAVA_PATHS=/usr/local/jdk-1.7.0/bin
 HASKELL_PATHS=$HOME/.cabal/bin
-RUBY_PATHS=$HOME/.rbenv/bin:$HOME/.gem/ruby/2.0.0/bin
 NODE_PATHS=/usr/local/share/npm/bin
 DEPLOYMENT_PATHS=:/usr/local/heroku/bin
 
-PATH=$PATH:$RUBY_PATHS:$NODE_PATHS:$JAVA_PATHS:$DEPLOYMENT_PATHS:/usr/local/bin:/home/smd/bin
+PATH=$PATH:$NODE_PATHS:$JAVA_PATHS:$DEPLOYMENT_PATHS:/usr/local/bin:/home/smd/bin
 eval "$(rbenv init -)"
