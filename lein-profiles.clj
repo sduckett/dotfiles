@@ -23,19 +23,21 @@
          [lein-ancient "0.6.7"]             ;; https://github.com/xsc/lein-ancient
 
          ;; Read the friendly source-code
+         [marick/suchwow "4.0.1"]           ;; https://github.com/marick/suchwow
          [lein-ubersource "0.1.1"]          ;; https://github.com/puppetlabs/lein-ubersource
          [thalia "0.1.0"]                   ;; https://github.com/jafingerhut/thalia
          [lein-marginalia "0.8.0"]]         ;; https://github.com/gdeer81/lein-marginalia]
 
          :dependencies [[org.clojure/tools.nrepl "0.2.10"]
-                        ;; [pjstadig/humane-test-output "0.7.0"]
+                        ;;[pjstadig/humane-test-output "0.7.0"] ; this broke cider for me....
                         [im.chit/vinyasa "0.1.8"]
                         [spyscope "0.1.5"]
                         [thalia "0.1.0"]
                         [org.clojure/tools.namespace "0.2.11"]]
 
         :injections [(require 'clojure.tools.namespace.repl)
-                     ;; (require 'pjstadig.humane-test-output)
+                     ;; (require 'pjstadig.humane-test-output) ;this broke cider for me....
+                     (require 'such.better-doc)
                      (require 'spyscope.core)
                      (require 'vinyasa.inject)
                      (require 'thalia.doc)
