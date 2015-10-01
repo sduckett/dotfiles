@@ -13,8 +13,8 @@ URxvt.internalBorder:  3
 URxvt.lineSpace:       0
 URxvt*letterSpace:     0
 URxvt.allow_bold:      false
-URxvt.font:            xft:Inconsolata\-dz for Powerline:pixelsize=16:antialias=true:hinting=true
-URxvt.boldFont:        xft:Inconsolata\-dz for Powerline:bold:pixelsize=16:antialias=true:hinting=true
+URxvt.font:            xft:Input Mono:pixelsize=16:antialias=true:hinting=true
+URxvt.boldFont:        xft:Input Mono:bold:pixelsize=16:antialias=true:hinting=true
 URxvt.scrollStyle:     rxvt
 URxvt.scrollBar:       false
 URxvt.cursorBlink:     true
