@@ -39,8 +39,9 @@ emacs --daemon      # prefer emacsclient to starting the entire system again
 ~/bin/shifty &      # Shifty is a red-shift program by a Debian guy
 ~/bin/gpg-agent.sh
 xsetroot -solid black && qiv -y ~/.wallpaper.jpg
-xmonad || fvwm || xterm
 xscreensaver &
+xmonad || fvwm || xterm
+
 
 if [ "$SSH_AGENT_PID" ]; then
 	ssh-add -D < /dev/null
