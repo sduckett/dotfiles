@@ -1,7 +1,7 @@
 #
 # Silly defaults for system tools
 #
-alias "ls=ls -htrF --color=auto"
+alias "ls=ls -htrFG"
 #
 # A crutch, to be used when a virtual machine hasn't been configured yet.
 #
