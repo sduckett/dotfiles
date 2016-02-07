@@ -17,7 +17,7 @@ compinit
 ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="darkblood"
 DISABLE_AUTO_UPDATE="false"
-plugins=(git git-extras archlinux ruby gpg-agent lein sudo systemd)
+plugins=(lein git tmux archlinux ruby gpg-agent sudo systemd)
 
 source $ZSH/oh-my-zsh.sh
 source ~/.democracy-works.zsh
