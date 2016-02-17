@@ -31,4 +31,8 @@ alias "vga-above=xrandr --output VGA1 --auto --above LVDS1"
 alias "vga-cloned=xrandr --output VGA1 --auto --same-as LVDS1"
 alias "dp-above=xrandr --output LVDS1 --preferred --output DP1 --preferred --above LVDS1"
 alias "dp-cloned=xrandr --output LVDS1 --preferred --output DP1 --preferred --same-as LVDS1"
-alias "onescreen=xrandr --output LVDS1 --preferred --output DP1 --off --output VGA1 --off"
+alias "onescreen=xrandr --output LVDS1 --preferred --output DP1 --off --output VGA1 --off --output HDMI1 --off"
+#
+# Programming things
+#
+alias "set-esptime=echo T$(($(date +%s)+60*60*-5)) > /dev/ttyUSB0"
