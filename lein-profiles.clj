@@ -7,53 +7,30 @@
 ;;; https://github.com/technomancy/leiningen/issues/1900
 
 {:user {:plugins
-        [
-         ;; Middleware for cider
-         [org.clojure/tools.nrepl "0.2.10"] ;; https://github.com/clojure/tools.nrepl
-         [cider/cider-nrepl "0.9.1"]        ;; https://github.com/clojure-emacs/cider-nrepl
-         [refactor-nrepl "1.1.0"]           ;; https://github.com/clojure-emacs/refactor-nrepl
+        [[lein-bikeshed "0.2.0"]
+         [lein-deps-tree "0.1.2"]
+         [lein-kibit "0.1.2"]
+         [lein-ancient "0.6.7" :exclusions [org.clojure/clojure]]
+         [lein-ubersource "0.1.1"]
+         [lein-cloverage "1.0.6"]]
+        :source-paths ["~/.lein/src"]
 
-         ;; Do you feel like RSpec today?
-         [lein-midje "3.1.3"]               ;; https://github.com/marick/lein-midje
-
-         ;; What do I need to fuss about before I commit?
-         [lein-bikeshed "0.2.0"]            ;; https://github.com/dakrone/lein-bikeshed
-         [lein-deps-tree "0.1.2"]           ;; https://github.com/the-kenny/lein-deps-tree
-         [lein-kibit "0.1.2"]               ;; https://github.com/jonase/kibit
-         [lein-ancient "0.6.7"]             ;; https://github.com/xsc/lein-ancient
-
-         ;; Read the friendly source-code
-         [marick/suchwow "4.0.1"]           ;; https://github.com/marick/suchwow
-         [lein-ubersource "0.1.1"]          ;; https://github.com/puppetlabs/lein-ubersource
-         [thalia "0.1.0"]                   ;; https://github.com/jafingerhut/thalia
-         [lein-marginalia "0.8.0"]]         ;; https://github.com/gdeer81/lein-marginalia]
-
-         :dependencies [[org.clojure/tools.nrepl "0.2.10"]
-                        ;;[pjstadig/humane-test-output "0.7.0"] ; this broke cider for me....
-                        [im.chit/vinyasa "0.1.8"]
-                        [spyscope "0.1.5"]
-                        [thalia "0.1.0"]
-                        [org.clojure/tools.namespace "0.2.11"]]
+        :dependencies [[org.clojure/tools.nrepl "0.2.12"]
+                       [org.clojure/tools.namespace "0.2.11"]
+                       [spyscope "0.1.5"]
+                       [pjstadig/humane-test-output "0.7.1"] ; this broke cider for me....
+                       ]
 
         :injections [(require 'clojure.tools.namespace.repl)
-                     ;; (require 'pjstadig.humane-test-output) ;this broke cider for me....
-                     (require 'such.better-doc)
                      (require 'spyscope.core)
-                     (require 'vinyasa.inject)
-                     (require 'thalia.doc)
+                     (require 'pjstadig.humane-test-output) ;this broke cider for me....
+                     (pjstadig.humane-test-output/activate!)]
 
-                     ;; (pjstadig.humane-test-output/activate!)
-                     (vinyasa.inject/inject 'clojure.core '>
-                                            '[[clojure.repl doc source]
-                                              [clojure.pprint pprint pp]
-                                              [vinyasa.pull pull]
-                                              [clojure.tools.namespace.repl refresh]])
-                     ]
-
-         :aliases {"sanity-check" ["do"
-                                   ["clean"]
-                                   ["with-profile" "production" "deps" ":tree"] ["ancient"] ["kibit"] ["bikeshed"]]
-                   "rtfs" ["do"
-                           ["clean"]
-                           ["ubersource"]
-                           ["marg"]]}}}
+        :aliases {"sanity" ["do"
+                            ["clean"]
+                            ["with-profile" "production" "deps" ":tree"]
+                            ["ancient"] ["kibit"] ["bikeshed"]]
+                  "rtfs" ["do"
+                          ["clean"]
+                          ["ubersource"]
+                          ["marg"]]}}}
