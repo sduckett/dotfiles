@@ -15,7 +15,8 @@ compinit
 
 # Oh My Zsh interupts your shell environment
 ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="darkblood"
+ZSH_THEME="amuse"
+#ZSH_THEME="miloshadzic"
 DISABLE_AUTO_UPDATE="false"
 plugins=(lein git tmux archlinux ruby gpg-agent sudo systemd)
 
