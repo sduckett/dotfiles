@@ -12,14 +12,10 @@
 
         :dependencies [[org.clojure/tools.nrepl "0.2.12"]
                        [org.clojure/tools.namespace "0.2.11"]
-                       [spyscope "0.1.5"]
-                       #_[pjstadig/humane-test-output "0.7.1"] ; this broke cider for me....
-                       ]
+                       [spyscope "0.1.5"]]
 
         :injections [(require 'clojure.tools.namespace.repl)
-                     (require 'spyscope.core)
-                     #_(require 'pjstadig.humane-test-output) ;this broke cider for me....
-                     #_(pjstadig.humane-test-output/activate!)]
+                     (require 'spyscope.core)]
 
         :aliases {"sanity" ["do"
                             ["clean"]
