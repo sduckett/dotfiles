@@ -21,6 +21,7 @@ DISABLE_AUTO_UPDATE="false"
 plugins=(lein git tmux archlinux ruby gpg-agent sudo systemd)
 
 source $ZSH/oh-my-zsh.sh
+source ~/.vip.zsh
 source ~/.democracy-works.zsh
 source ~/.programming-tools.zsh
 source ~/.zshalias
