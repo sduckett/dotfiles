@@ -27,3 +27,4 @@ source ~/.programming-tools.zsh
 source ~/.zshalias
 
 PATH=$PATH:$NODE_PATHS:$JAVA_PATHS:$DEPLOYMENT_PATHS:/usr/local/bin:/home/smd/bin
+eval "$(rbenv init -)"
