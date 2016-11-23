@@ -18,5 +18,5 @@ source ~/.programming-tools.zsh
 source ~/.zshalias
 source ~/.completions.zsh && compinit
 
-PATH=$PATH:$NODE_PATHS:$JAVA_PATHS:$DEPLOYMENT_PATHS:/usr/local/bin:/home/smd/bin
+PATH=$PATH:$NODE_PATHS:$JAVA_PATHS:$DEPLOYMENT_PATHS:/usr/local/bin:$HOME/smd/bin:$HOME/.rbenv/bin:$PATH
 eval "$(rbenv init -)"
