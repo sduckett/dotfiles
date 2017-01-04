@@ -1,0 +1,20 @@
+\timing on
+\set HISTFILE ~/.psql/history- :DBNAME
+\set COMP_KEYWORD_CASE lower
+\pset null '(null)'
+\x auto
+
+-- requires adding 'pg_stat_statements' to 'shared_preload_libraries' in postgresql.conf
+\set show_slow_queries 'SELECT (total_time / 1000 / 60) as total_minutes, (total_time/calls) as average_time, query FROM pg_stat_statements ORDER BY 1 DESC LIMIT 100;'
+
+\set settings 'select name, setting,unit,context from pg_settings;'
+
+\set activity 'select datname, pid, usename, application_name,client_addr, client_hostname, client_port, query, state from pg_stat_activity;'
+
+\set waits 'SELECT pg_stat_activity.pid, pg_stat_activity.query, pg_stat_activity.waiting, now() - pg_stat_activity.query_start AS \"totaltime\", pg_stat_activity.backend_start FROM pg_stat_activity WHERE pg_stat_activity.query !~ \'%IDLE%\'::text AND pg_stat_activity.waiting = true;'
+
+\set relationsize 'SELECT nspname || \'.\' || relname AS \"relation\", pg_size_pretty(pg_relation_size(C.oid)) AS "size" FROM pg_class C LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace) WHERE nspname NOT IN (\'pg_catalog\', \'information_schema\') ORDER BY pg_relation_size(C.oid) DESC LIMIT 40;'
+
+\set trashindexes '(select s.relname as relation, s.indexrelname as index, s.idx_scan as scans, pg_size_pretty(pg_relation_size(s.relid)) as "table size", pg_size_pretty(pg_relation_size(s.indexrelid)) as "index size" from pg_stat_user_indexes s join pg_index i on i.indexrelid=s.indexrelid left join pg_constraint c on i.indrelid=c.conrelid and array_to_string(i.indkey, '' '') = array_to_string(c.conkey, '' '') where i.indisunique is false and pg_relation_size(s.relid) > 1000000 and s.idx_scan < 100000 and c.confrelid is null order by s.idx_scan asc, pg_relation_size(s.relid) desc );'
+
+\set missingindexes '(select src_table, dst_table, fk_name, pg_size_pretty(s_size) as s_size, pg_size_pretty(d_size) as d_size, d from ( select distinct on (1,2,3,4,5) textin(regclassout(c.conrelid)) as src_table, textin(regclassout(c.confrelid)) as dst_table, c.conname as fk_name, pg_relation_size(c.conrelid) as s_size, pg_relation_size(c.confrelid) as d_size, array_upper(di.indkey::int[], 1) + 1 - array_upper(c.conkey::int[], 1) as d from pg_constraint c left join pg_index di on di.indrelid = c.conrelid and array_to_string(di.indkey, '' '') ~ (''^'' || array_to_string(c.conkey, '' '') || ''( |$)'') join pg_stat_user_tables st on st.relid = c.conrelid where c.contype = ''f'' order by 1,2,3,4,5,6 asc) mfk where mfk.d is distinct from 0 and mfk.s_size > 1000000 order by mfk.s_size desc, mfk.d desc );'
