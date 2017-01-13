@@ -18,7 +18,7 @@ source ~/.programming-tools.zsh
 source ~/.zshalias
 source ~/.completions.zsh && compinit
 
-PATH=$PATH:$NODE_PATHS:$JAVA_PATHS:$DEPLOYMENT_PATHS:/usr/local/bin:$HOME/smd/bin:$HOME/.rbenv/bin:$PATH
+PATH=$PATH:$NODE_PATHS:$JAVA_PATHS:$DEPLOYMENT_PATHS:/usr/local/bin:$HOME/bin:$HOME/.rbenv/bin:$PATH
 eval "$(rbenv init -)"
 if test -f ~/.gnupg/.gpg-agent-info -a -n "$(pgrep gpg-agent)"; then
   source ~/.gnupg/.gpg-agent-info
