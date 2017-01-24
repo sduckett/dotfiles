@@ -4,14 +4,15 @@
 \pset null '(null)'
 \x auto
 
--- requires adding 'pg_stat_statements' to 'shared_preload_libraries' in postgresql.conf
-\set show_slow_queries 'SELECT (total_time / 1000 / 60) as total_minutes, (total_time/calls) as average_time, query FROM pg_stat_statements ORDER BY 1 DESC LIMIT 100;'
+-- first, set `shared_preload_libraries='pg_stat_statements'` in postgresql.conf and restart the server
+-- second, start `psql` and run `create extension pg_stat_statements;`
+\set slow_queries 'SELECT (total_time / 1000 / 60) as total_minutes, (total_time/calls) as average_time, query FROM pg_stat_statements ORDER BY 1 DESC LIMIT 100;'
 
 \set settings 'select name, setting,unit,context from pg_settings;'
 
-\set activity 'select datname, pid, usename, application_name,client_addr, client_hostname, client_port, query, state from pg_stat_activity;'
+\set active 'select datname, pid, usename, application_name,client_addr, client_hostname, client_port, query, state from pg_stat_activity where state=''active'';'
 
-\set waits 'SELECT pg_stat_activity.pid, pg_stat_activity.query, pg_stat_activity.waiting, now() - pg_stat_activity.query_start AS \"totaltime\", pg_stat_activity.backend_start FROM pg_stat_activity WHERE pg_stat_activity.query !~ \'%IDLE%\'::text AND pg_stat_activity.waiting = true;'
+\set waiting 'SELECT pid, query, waiting, now() - query_start AS \"totaltime\", backend_start FROM pg_stat_activity WHERE query !~ \'%IDLE%\'::text AND waiting = true;'
 
 \set relationsize 'SELECT nspname || \'.\' || relname AS \"relation\", pg_size_pretty(pg_relation_size(C.oid)) AS "size" FROM pg_class C LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace) WHERE nspname NOT IN (\'pg_catalog\', \'information_schema\') ORDER BY pg_relation_size(C.oid) DESC LIMIT 40;'
 
