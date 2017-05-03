@@ -12,11 +12,9 @@
         :source-paths ["~/.lein/src"]
 
         :dependencies [[org.clojure/tools.nrepl "0.2.12"]
-                       [org.clojure/tools.namespace "0.2.11"]
-                       [spyscope "0.1.5"]]
+                       [org.clojure/tools.namespace "0.2.11"]]
 
-        :injections [(require 'clojure.tools.namespace.repl)
-                     (require 'spyscope.core)]
+        :injections [(require 'clojure.tools.namespace.repl)]
 
         :aliases {"sanity" ["do"
                             ["clean"]
