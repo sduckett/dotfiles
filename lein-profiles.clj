@@ -4,6 +4,8 @@
          [refactor-nrepl "2.2.0"]
          [lein-deps-tree "0.1.2"]
          [lein-kibit "0.1.2"]
+         [jonase/eastwood "0.2.3"]
+         [lein-checkall "0.1.1"]
          [lein-try "0.4.3"]
          [lein-ancient "0.6.10" :exclusions [org.clojure/clojure]]
          [lein-ubersource "0.1.1"]
