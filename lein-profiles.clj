@@ -1,6 +1,7 @@
 {:user {:plugins
         [[lein-bikeshed "0.2.0"]
-         [cider/cider-nrepl "0.11.0"]
+         #_[cider/cider-nrepl "0.14.0"]
+         [refactor-nrepl "2.2.0"]
          [lein-deps-tree "0.1.2"]
          [lein-kibit "0.1.2"]
          [lein-try "0.4.3"]
