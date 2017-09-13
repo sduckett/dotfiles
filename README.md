@@ -1,31 +1,38 @@
-# Dotfile
+# Dotfiles
 
-## Introduction
+What do I like when I setup a fancy new computer system for writing software?
 
-This is how I start to setup a new unix-type machine:
+## check-deps
 
-1. clone this repo once git is installed
-1. make a symlink from my homedir to the things here
-1. find out what I forgot, and add it to the repo
-1. GOTO 1
+There should be a self-contained, portable executable that runs on a basic Unix-type machine without doing anything.
 
-## Other ideas
+### Basic Dependencies
 
-This is a pretty simple idea, but "why don't you just..."
+We've got to have at least some basic tools to get the job done. There are many out there, but these are mine.  Until this list is seven, plus or minus seven, it is not complete.
 
-- use docker images?
-- use chef?
-- use puppet?
-- use XYZZY Configuratron?
+1. git
+1. tmux
+1. emacs
+1. zsh
 
-They're too complex to do with a minimal OpenBSD system. KISS, and use those
-abstraction layers when you're building a deployable application. I want to be
-up and running in 5 minutes flat, and be able to do it from a USB device on a
-tiny embedded system with no network access.
+### Fancy Dependencies
 
-## TODO
+Sometimes you get a Macintosh computer and your organization likes special software.
 
-1. write a Makefile and whatever tools make it easy to get a system online QUICKLY.
+1. Zoom
+1. Slack
+1. 
+
+## setup
+
+There should be a self-contained, portable executable that - maybe if dependencies, maybe if not - does the symlink stuff that would be need to be done if cloning the repo and trying to use the tools they configure.
+
+## How to Start
+
+1. Clone this repository
+1. Run `check-deps` and see what it tells you
+1. Run `setup`
+1. Take the rest of the day off!
 
 ## Tmux Plugins
 
