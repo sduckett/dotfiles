@@ -7,8 +7,10 @@ HISTSIZE=1000
 SAVEHIST=1000
 EDITOR="emacsclient -t"
 ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="miloshadzic"
+ZSH_THEME="lambda"
 DISABLE_AUTO_UPDATE="false"
+DISABLE_AUTO_TITLE=true
+
 plugins=(lein git tmux sudo systemd)
 
 source $ZSH/oh-my-zsh.sh
