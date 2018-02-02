@@ -23,3 +23,9 @@ function dirty-repos() {
         popd >/dev/null
     done
 }
+
+# If you don't set [default] credentials, you'll never accidentally
+# operate on the wrong one; instead, you'll have to call out which
+# system you want to manage.
+alias "aws-dw=aws --profile=democracyworks"
+alias "aws-smd=aws --profile=smd"
