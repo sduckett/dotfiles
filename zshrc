@@ -14,8 +14,6 @@ DISABLE_AUTO_TITLE=true
 plugins=(lein git tmux sudo systemd)
 
 source $ZSH/oh-my-zsh.sh
-source ~/.vip.zsh
-source ~/.democracy-works.zsh
 source ~/.programming-tools.zsh
 source ~/.zshalias
 source ~/.completions.zsh && compinit
