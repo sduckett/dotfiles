@@ -7,5 +7,5 @@
    [lein-checkall "0.1.1"]
    [lein-cloverage "1.0.6"]
    [lein-deps-tree "0.1.2"]
-   [lein-kibit "0.1.5"]]}}
-
+   [lein-kibit "0.1.5"]
+   [com.jakemccrary/lein-test-refresh "0.23.0"]]}}
