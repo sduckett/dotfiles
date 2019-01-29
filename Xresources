@@ -1,13 +1,19 @@
 XTerm*loginShell:      true
-
+XTerm.font:            xft:Input Mono:pixelsize=16:antialias=true:hinting=true
+XTerm.boldFont:        xft:Input Mono:bold:pixelsize=16:antialias=true:hinting=true
 
 
 !! Rxvt-unicode settings
 URxvt.iso14755:        false
 URxvt.iso14755_52:     false
 URxvt.depth:           32
-URxvt.transparent:     true
-URxvt.fading:          15
+
+!! Something was breaking fluxbox....I don't know if it was the transparency or
+!!the 32 bit color... but it seems to work without transparancy, which is an
+!!xmonad thing...
+
+!! URxvt.transparent: true
+!!URxvt.fading:          15
 URxvt.loginShell:      true
 URxvt.internalBorder:  3
 URxvt.lineSpace:       0
@@ -37,26 +43,6 @@ URxvt.keysym.C-S-Down: font-size:decglobal
 ! URxvt.keysym.C-S-Down: perl:font-size:decglobal
 
 !! A Color theme experiment - Tango!
-!!urxvt*foreground: white
-!!urxvt*background: black
-! *color0:  #2E3436
-! *color1:  #a40000
-! *color2:  #4E9A06
-! *color3:  #C4A000
-! *color4:  #3465A4
-! *color5:  #75507B
-! *color6:  #ce5c00
-! *color7:  #babdb9
-! *color8:  #555753
-! *color9:  #EF2929
-! *color10: #8AE234
-! *color11: #FCE94F
-! *color12: #729FCF
-! *color13: #AD7FA8
-! *color14: #fcaf3e
-! *color15: #EEEEEC
-
-
 !! Some dark colorscheme I found on a Xresources colorscheme generator website somewhere....
 ! special
 *.foreground:   #c5c8c6
@@ -86,3 +72,22 @@ URxvt.keysym.C-S-Down: font-size:decglobal
 ! white
 *.color7:       #c5c8c6
 *.color15:      #ffffff
+
+! urxvt*foreground: white
+! urxvt*background: black
+!  *color0:  #2E3436
+!  *color1:  #a40000
+!  *color2:  #4E9A06
+!  *color3:  #C4A000
+!  *color4:  #3465A4
+!  *color5:  #75507B
+!  *color6:  #ce5c00
+!  *color7:  #babdb9
+!  *color8:  #555753
+!  *color9:  #EF2929
+!  *color10: #8AE234
+!  *color11: #FCE94F
+!  *color12: #729FCF
+!  *color13: #AD7FA8
+!  *color14: #fcaf3e
+!  *color15: #EEEEEC

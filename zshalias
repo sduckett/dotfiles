@@ -32,22 +32,18 @@ alias "screencast4win=mencoder -forceidx -mc 0 -noskip -skiplimit 0 -ovc lavc -l
 #
 # Display outputs
 #
-alias "vga-above=xrandr --output VGA1 --auto --above LVDS1"
-alias "vga-cloned=xrandr --output VGA1 --auto --same-as LVDS1"
-alias "dp-above=xrandr --output LVDS1 --preferred --output DP1 --preferred --above LVDS1"
-alias "dp-cloned=xrandr --output LVDS1 --preferred --output DP1 --preferred --same-as LVDS1"
-alias "onescreen=xrandr --output LVDS1 --preferred --output DP1 --off --output VGA1 --off --output HDMI1 --off"
+alias "vga-above=xrandr --output VGA1 --auto --above LVDS-1"
+alias "vga-cloned=xrandr --output VGA1 --auto --same-as LVDS-1"
+alias "dp-above=xrandr --output LVDS-1 --preferred --output DP-1 --preferred --above LVDS-1"
+alias "dp-cloned=xrandr --output LVDS-1 --preferred --output DP-1 --preferred --same-as LVDS-1"
+alias "onescreen=xrandr --output LVDS-1 --preferred --output DP-1 --off --output VGA1 --off --output HDMI1 --off"
 
 #
 # Programming things
 #
 alias "set-esptime=echo T$(($(date +%s)+60*60*-5)) > /dev/ttyUSB0"
-
-# Pairing can be done through an SSH tunnel
-alias tunnel-dnc="ssh -nNT -R 3742:localhost:22 sduckett@denofclojure.org"
-
-alias yourkit="JAVA_OPTS=-agentpath:/Applications/YourKit-Java-Profiler-2017.02.app/Contents/Resources/bin/mac/libyjpagent.jnilib"
+alias "yourkit=JAVA_OPTS=-agentpath:/Applications/YourKit-Java-Profiler-2017.02.app/Contents/Resources/bin/mac/libyjpagent.jnilib"
 
 # Some things for docker
-alias stale-images="docker images | grep '<none>' | tr -s ' ' | cut -d ' ' -f 3"
-alias rm-stale-images="docker rmi $(stale-images)"
+alias "stale-images=docker images | grep '<none>' | tr -s ' ' | cut -d ' ' -f 3"
+alias "rm-stale-images=docker rmi $(stale-images)"

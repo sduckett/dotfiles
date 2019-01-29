@@ -24,8 +24,23 @@ function dirty-repos() {
     done
 }
 
+
 # If you don't set [default] credentials, you'll never accidentally
 # operate on the wrong one; instead, you'll have to call out which
 # system you want to manage.
-alias "aws-dw=aws --profile=democracyworks"
+alias "aws-dw=aws --profile=dw"
 alias "aws-smd=aws --profile=smd"
+
+function run-hasktags() {
+  hasktags --ignore-close-implementation --etags .
+}
+
+
+# provide an path to cleanup
+function cleanup-repos() {
+    for i in $1/*; do 
+	pushd $i && git fetch -p
+	popd
+    done
+}
+
