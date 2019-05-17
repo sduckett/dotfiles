@@ -38,7 +38,11 @@ export GPG_TTY
 
 mkdir -p ~/.nvm
 export NVM_DIR="$HOME/.nvm"
-. "/usr/local/opt/nvm/nvm.sh"
+export NVM_SRC="/usr/local/opt/nvm/nvm.sh"
+if [ -f  $NVM_SRC ]; then
+   source $NVM_SRC
+fi
+
 export PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
 export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
