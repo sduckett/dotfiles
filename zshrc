@@ -26,12 +26,15 @@ if [ -f ~/.tokens.zsh ]; then
   source ~/.tokens.zsh
 fi
 
-if [ -f ~/.gnupg/.gpg-agent-info -a -n "$(pgrep gpg-agent)" ]; then
-  source ~/.gnupg/.gpg-agent-info
-  export GPG_AGENT_INFO
-else
-  eval $(gpg-agent --quiet --daemon ~/.gnupg/.gpg-agent-info)
-fi
+# if [ -f ~/.gnupg/.gpg-agent-info -a -n "$(pgrep gpg-agent)" ]; then
+#   source ~/.gnupg/.gpg-agent-info
+#   export GPG_AGENT_INFO
+# else
+#   eval $(gpg-agent --quiet --daemon ~/.gnupg/.gpg-agent-info)
+# fi
+
+GPG_TTY=$(tty)
+export GPG_TTY
 
 mkdir -p ~/.nvm
 export NVM_DIR="$HOME/.nvm"
