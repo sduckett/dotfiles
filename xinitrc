@@ -32,5 +32,6 @@ fi
 ~/bin/gpg-agent.sh
 xsetroot -solid black && qiv -y ~/.wallpaper.jpg
 xscreensaver &
+urxvtd -q -f -o
 exec startfluxbox || fvwm || xterm
 #xmonad || fvwm || xterm
