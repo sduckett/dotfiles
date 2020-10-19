@@ -4,23 +4,10 @@
 alias "ls=ls -htrFG"
 
 #
-# A crutch, to be used when a virtual machine hasn't been configured yet.
-#
-alias "rb2=rbenv local 2.1.2"
-alias "rb1=rbenv local 1.9.3"
-
-#
-# Sundries and notions to distract
-#
-alias "tweet=t update"
-alias "mavis=gtypist -bw"
-
-#
 # Getting Real Work™ done
 #
 alias "e=emacsclient -t"
 alias "pg-user=sudo -i -u postgres"
-alias "diff=gdiff"
 
 #
 # Screencast tools
@@ -47,3 +34,9 @@ alias "yourkit=JAVA_OPTS=-agentpath:/Applications/YourKit-Java-Profiler-2017.02.
 # Some things for docker
 alias "stale-images=docker images | grep '<none>' | tr -s ' ' | cut -d ' ' -f 3"
 alias "rm-stale-images=docker rmi $(stale-images)"
+
+# If you don't set [default] credentials, you'll never accidentally
+# operate on the wrong one; instead, you'll have to call out which
+# system you want to manage.
+alias "aws-dw=aws --profile=dw"
+alias "aws-smd=aws --profile=smd"

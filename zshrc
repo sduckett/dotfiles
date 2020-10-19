@@ -19,8 +19,8 @@ source ~/.programming-tools.zsh
 source ~/.zshalias
 source ~/.completions.zsh && compinit
 
-PATH=$PATH:$NODE_PATHS:$JAVA_PATHS:$DEPLOYMENT_PATHS:/usr/local/bin:$HOME/bin:$HOME/.rbenv/bin:~/.cabal/bin:$PATH
-eval "$(rbenv init -)"
+PATH=$NODE_PATHS:$JAVA_PATHS:$DEPLOYMENT_PATHS:/usr/local/bin:$HOME/bin:$HOME/.rbenv/bin:/usr/local/opt/postgresql@9.6/bin:$HOME/.jenv/bin:$PATH
+
 
 if [ -f ~/.tokens.zsh ]; then
   source ~/.tokens.zsh
@@ -35,20 +35,3 @@ fi
 
 GPG_TTY=$(tty)
 export GPG_TTY
-
-mkdir -p ~/.nvm
-export NVM_DIR="$HOME/.nvm"
-export NVM_SRC="/usr/local/opt/nvm/nvm.sh"
-if [ -f  $NVM_SRC ]; then
-   source $NVM_SRC
-fi
-
-export PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"
-export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
-export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
-export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
-
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/local/Cellar/terraform/0.11.11/bin/terraform terraform
-if [ /usr/local/bin/kubectl ]; then source <(kubectl completion zsh); fi

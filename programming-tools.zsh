@@ -3,10 +3,19 @@
 ##########################################
 
 PYTHONDOCS=/usr/share/doc/python2/html/
-JAVA_PATHS=/usr/local/jdk-1.7.0/bin
 HASKELL_PATHS=$HOME/.cabal/bin
 NODE_PATHS=/usr/local/share/npm/bin
 DEPLOYMENT_PATHS=:/usr/local/heroku/bin
+
+eval "$(rbenv init -)"
+eval "$(jenv init -)"
+
+mkdir -p ~/.nvm
+export NVM_DIR="$HOME/.nvm"
+export NVM_SRC="/usr/local/opt/nvm/nvm.sh"
+if [ -f  $NVM_SRC ]; then
+   source $NVM_SRC
+fi
 
 function dirty-repos() {
     for gitprojpath in `find . -type d -name .git | sed "s/\/\.git//"`; do
@@ -24,13 +33,6 @@ function dirty-repos() {
     done
 }
 
-
-# If you don't set [default] credentials, you'll never accidentally
-# operate on the wrong one; instead, you'll have to call out which
-# system you want to manage.
-alias "aws-dw=aws --profile=dw"
-alias "aws-smd=aws --profile=smd"
-
 function run-hasktags() {
   hasktags --ignore-close-implementation --etags .
 }
@@ -38,9 +40,8 @@ function run-hasktags() {
 
 # provide an path to cleanup
 function cleanup-repos() {
-    for i in $1/*; do 
+    for i in $1/*; do
 	pushd $i && git fetch -p
 	popd
     done
 }
-
