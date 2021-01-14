@@ -19,7 +19,7 @@ source ~/.programming-tools.zsh
 source ~/.zshalias
 source ~/.completions.zsh && compinit
 
-PATH=$PATH:$NODE_PATHS:$JAVA_PATHS:$DEPLOYMENT_PATHS:/usr/local/bin:$HOME/bin:$HOME/.rbenv/bin:~/.cabal/bin:$PATH
+PATH=$PATH:$NODE_PATHS:$JAVA_PATHS:$DEPLOYMENT_PATHS:/usr/local/bin:$HOME/bin:$HOME/.rbenv/bin:~/.cabal/bin:~/work/src/dw-tools/bin:$PATH
 eval "$(rbenv init -)"
 
 if [ -f ~/.tokens.zsh ]; then
@@ -45,9 +45,6 @@ fi
 
 export PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
-export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
-export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
-export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/Cellar/terraform/0.11.11/bin/terraform terraform
