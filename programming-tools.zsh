@@ -1,3 +1,5 @@
+set -o allexport
+
 ##########################################
 # Things for the programming toolbox     #
 ##########################################
@@ -10,9 +12,11 @@ DEPLOYMENT_PATHS=:/usr/local/heroku/bin
 eval "$(rbenv init -)"
 eval "$(jenv init -)"
 
-mkdir -p ~/.nvm
-export NVM_DIR="$HOME/.nvm"
-export NVM_SRC="/usr/local/opt/nvm/nvm.sh"
+NVM_DIR="$HOME/.nvm"
+NVM_SRC="/usr/local/opt/nvm/nvm.sh"
+
+mkdir -p $NVM_DIR
+
 if [ -f  $NVM_SRC ]; then
    source $NVM_SRC
 fi
@@ -44,4 +48,10 @@ function cleanup-repos() {
 	pushd $i && git fetch -p
 	popd
     done
+}
+
+function setup-gpg() {
+    export GPG_TTY="$(tty)"
+    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+    gpgconf --launch gpg-agent
 }

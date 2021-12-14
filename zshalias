@@ -1,16 +1,8 @@
-#
-# Silly defaults for system tools
-#
-alias "ls=ls -htrFG"
-
-#
-# Getting Real Work™ done
-#
 alias "e=emacsclient -t"
+alias "ls=ls -htrFG"
+alias "ll=ls -l"
 alias "pg-user=sudo -i -u postgres"
 
-#
-# Screencast tools
 #
 alias "screencast=ffmpeg -f x11grab -r 25 -s 1366x768 -i :0.0 -vcodec huffyuv -an ./screencast.avi"
 alias "screencast2mp2=ffmpeg -i ./screencast.avi -f mpeg2video -sameq ./mpeg2.mpg"
