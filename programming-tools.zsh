@@ -1,57 +1,28 @@
 set -o allexport
 
-##########################################
-# Things for the programming toolbox     #
-##########################################
+NVM_DIR="$HOME/.nvm"
+mkdir -p $NVM_DIR
+NODE_PATHS="/usr/local/share/npm/bin:$NVM_DIR/bin"
+[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/zsh_completion" ] && source "$NVM_DIR/zsh_completion"
 
-PYTHONDOCS=/usr/share/doc/python2/html/
-HASKELL_PATHS=$HOME/.cabal/bin
-NODE_PATHS=/usr/local/share/npm/bin
-DEPLOYMENT_PATHS=:/usr/local/heroku/bin
-
-eval "$(rbenv init -)"
+JAVA_PATHS="$HOME/.jenv/bin"
 eval "$(jenv init -)"
 
-NVM_DIR="$HOME/.nvm"
-NVM_SRC="/usr/local/opt/nvm/nvm.sh"
+HASKELL_PATHS=$HOME/.cabal/bin
 
-mkdir -p $NVM_DIR
+RUBY_PATHS="$HOME/.rbenv/bin"
+eval "$(rbenv init -)"
 
-if [ -f  $NVM_SRC ]; then
-   source $NVM_SRC
-fi
+PYTHONDOCS=/usr/share/doc/python2/html/
+PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
-function dirty-repos() {
-    for gitprojpath in `find . -type d -name .git | sed "s/\/\.git//"`; do
-        pushd . >/dev/null
+source "$HOME/.cargo/env"
 
-        cd $gitprojpath
-
-        isdirty=$(git status -s | grep "^.*")
-
-        if [ -n "$isdirty" ]; then
-            echo "DIRTY:" $gitprojpath
-        fi
-
-        popd >/dev/null
-    done
-}
-
-function run-hasktags() {
-  hasktags --ignore-close-implementation --etags .
-}
-
-
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+# TODO figure out why --smd 🖖
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 # provide an path to cleanup
-function cleanup-repos() {
-    for i in $1/*; do
-	pushd $i && git fetch -p
-	popd
-    done
-}
-
-function setup-gpg() {
-    export GPG_TTY="$(tty)"
-    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-    gpgconf --launch gpg-agent
-}

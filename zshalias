@@ -1,3 +1,5 @@
+alias 'snowsql=/Applications/SnowSQL.app/Contents/MacOS/snowsql'
+alias 'ttest=time make test | tee test.log'
 alias "e=emacsclient -t"
 alias "ls=ls -htrFG"
 alias "ll=ls -l"
@@ -32,3 +34,9 @@ alias "rm-stale-images=docker rmi $(stale-images)"
 # system you want to manage.
 alias "aws-dw=aws --profile=dw"
 alias "aws-smd=aws --profile=smd"
+
+alias 'camr=code-artifact && make repl'
+
+alias caf=code-artifact
+alias gcdf=git clean -df
+alias gcdf='git clean -df'
