@@ -8,35 +8,3 @@ alias "ls=ls -htrFG"
 #
 alias "e=emacsclient -t"
 alias "pg-user=sudo -i -u postgres"
-
-#
-# Screencast tools
-#
-alias "screencast=ffmpeg -f x11grab -r 25 -s 1366x768 -i :0.0 -vcodec huffyuv -an ./screencast.avi"
-alias "screencast2mp2=ffmpeg -i ./screencast.avi -f mpeg2video -sameq ./mpeg2.mpg"
-alias "screencast4win=mencoder -forceidx -mc 0 -noskip -skiplimit 0 -ovc lavc -lavcopts vcodec=msmpeg4v2:vhq -o ./windows_mpeg4.avi ./mpeg2.mpg"
-
-#
-# Display outputs
-#
-alias "vga-above=xrandr --output VGA1 --auto --above LVDS-1"
-alias "vga-cloned=xrandr --output VGA1 --auto --same-as LVDS-1"
-alias "dp-above=xrandr --output LVDS-1 --preferred --output DP-1 --preferred --above LVDS-1"
-alias "dp-cloned=xrandr --output LVDS-1 --preferred --output DP-1 --preferred --same-as LVDS-1"
-alias "onescreen=xrandr --output LVDS-1 --preferred --output DP-1 --off --output VGA1 --off --output HDMI1 --off"
-
-#
-# Programming things
-#
-alias "set-esptime=echo T$(($(date +%s)+60*60*-5)) > /dev/ttyUSB0"
-alias "yourkit=JAVA_OPTS=-agentpath:/Applications/YourKit-Java-Profiler-2017.02.app/Contents/Resources/bin/mac/libyjpagent.jnilib"
-
-# Some things for docker
-alias "stale-images=docker images | grep '<none>' | tr -s ' ' | cut -d ' ' -f 3"
-alias "rm-stale-images=docker rmi $(stale-images)"
-
-# If you don't set [default] credentials, you'll never accidentally
-# operate on the wrong one; instead, you'll have to call out which
-# system you want to manage.
-alias "aws-dw=aws --profile=dw"
-alias "aws-smd=aws --profile=smd"

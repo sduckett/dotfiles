@@ -4,7 +4,6 @@
 
 
 HASKELL_PATHS=$HOME/.cabal/bin
-NODE_PATHS=/usr/local/share/npm/bin
 DEPLOYMENT_PATHS=:/usr/local/heroku/bin
 
 function dirty-repos() {
@@ -27,11 +26,18 @@ function run-hasktags() {
   hasktags --ignore-close-implementation --etags .
 }
 
-
-# provide an path to cleanup
 function cleanup-repos() {
     for i in $1/*; do
 	pushd $i && git fetch -p
 	popd
     done
+}
+
+# It can be nice to wipe out old Docker images without using the GUI 🚮
+function stale-images() {
+    docker images | grep '<none>' | tr -s ' ' | cut -d ' ' -f 3
+}
+
+function rm-stale-images() {
+    docker rmi `stale-images`
 }

@@ -17,9 +17,16 @@ ZSH_DISABLE_COMPFIX=false
 # https://github.com/ohmyzsh/ohmyzsh/issues/9562
 DISABLE_MAGIC_FUNCTIONS=true
 
-plugins=(docker docker-compose git tmux sudo systemd mise)
+plugins=(docker docker-compose lein git tmux sudo systemd mise)
 
 source $ZSH/oh-my-zsh.sh
+source ~/.programming-tools.zsh
+# source ~/.zshalias
+
+autoload -U compinit; compinit
+
+# TODO I once had some completions defined, but I've lost them now...
+#source ~/.completions.zsh && compinit
 
 if [ -f $/.programming.zsh ]; then
     source ~/.programming.zsh
@@ -37,7 +44,32 @@ if [ -f ~/.tokens.zsh ]; then
   source ~/.tokens.zsh
 fi
 
-PATH=$HOME/bin:$HOME/.local/bin:$PATH
+if [ -f ~/.work.zsh ]; then
+  source ~/.work.zsh
+fi
 
-GPG_TTY=$(tty)
-export GPG_TTY
+PATH=$HOME/bin:$HOME/.local/bin:$HOME/repos/gitlab.com/gateless/sh/bin:$PATH
+
+function code-artifact() {
+     CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain gateless --domain-owner 546781284141 --query authorizationToken --output text`
+ }
+
+if [ -f "which code-artifact" ]; then
+  code-artifact
+fi
+
+export GPG_TTY="$(tty)"
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+gpgconf --launch gpg-agent
+
+# begin bitcar
+export BITCAR_WORKSPACE_DIR="/Users/sean/repos"
+export BITCAR_EDITOR_CMD="emacsclient"
+source $HOME/.bitcar/cli.sh
+source $HOME/.bitcar/completions.sh
+# end bitcar
+
+# #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/Users/sean/.sdkman"
+[[ -s "/Users/sean/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/sean/.sdkman/bin/sdkman-init.sh"
+export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
