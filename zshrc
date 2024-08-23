@@ -18,10 +18,11 @@ ZSH_DISABLE_COMPFIX=false
 DISABLE_MAGIC_FUNCTIONS=true
 
 plugins=(docker docker-compose lein git tmux sudo systemd mise)
+export DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
 
 source $ZSH/oh-my-zsh.sh
 source ~/.programming-tools.zsh
-# source ~/.zshalias
+source ~/.zshalias
 
 autoload -U compinit; compinit
 
@@ -39,6 +40,10 @@ fi
 if [ -f ~/.completions.zsh ]; then
   source ~/.completions.zsh && compinit
 fi
+
+PATH=$NODE_PATHS:$JAVA_PATHS:$DEPLOYMENT_PATHS:$HOME/.rbenv/bin:$HOME/.jenv/bin:/usr/local/opt/postgresql@9.6/bin:$PATH
+PATH=/usr/local/bin:$HOME/bin:$HOME/repos/gitlab.com/gateless/sh/bin:$PATH
+
 
 if [ -f ~/.tokens.zsh ]; then
   source ~/.tokens.zsh
