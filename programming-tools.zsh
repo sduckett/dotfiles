@@ -7,8 +7,9 @@ HASKELL_PATHS=$HOME/.cabal/bin
 NODE_PATHS=/usr/local/share/npm/bin
 DEPLOYMENT_PATHS=:/usr/local/heroku/bin
 
-eval "$(rbenv init -)"
-eval "$(jenv init -)"
+# Deprecated in favor of `mise`
+#eval "$(rbenv init -)"
+#eval "$(jenv init -)"
 
 mkdir -p ~/.nvm
 export NVM_DIR="$HOME/.nvm"

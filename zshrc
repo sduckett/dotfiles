@@ -11,15 +11,18 @@ ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="lambda"
 DISABLE_AUTO_UPDATE="false"
 DISABLE_AUTO_TITLE=true
+# See discussion of double-paste problem here:
+# https://github.com/ohmyzsh/ohmyzsh/issues/9562
+DISABLE_MAGIC_FUNCTIONS=true
 
-plugins=(lein git tmux sudo systemd)
+plugins=(docker docker-compose git tmux sudo systemd mise)
 
 source $ZSH/oh-my-zsh.sh
 source ~/.programming-tools.zsh
 source ~/.zshalias
 source ~/.completions.zsh && compinit
 
-PATH=$NODE_PATHS:$JAVA_PATHS:$DEPLOYMENT_PATHS:/usr/local/bin:$HOME/bin:$HOME/.rbenv/bin:/usr/local/opt/postgresql@9.6/bin:$HOME/.jenv/bin:$PATH
+PATH=$HOME/bin:$HOME/.local/bin:$PATH
 
 
 if [ -f ~/.tokens.zsh ]; then
