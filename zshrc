@@ -78,3 +78,5 @@ source $HOME/.bitcar/completions.sh
 export SDKMAN_DIR="/Users/sean/.sdkman"
 [[ -s "/Users/sean/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/sean/.sdkman/bin/sdkman-init.sh"
 export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
+
+eval "$(mise activate zsh)"
