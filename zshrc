@@ -13,9 +13,11 @@ DISABLE_AUTO_UPDATE=false
 DISABLE_UPDATE_PROMPT=false
 DISABLE_AUTO_TITLE=true
 ZSH_DISABLE_COMPFIX=false
+
 # See discussion of double-paste problem here:
 # https://github.com/ohmyzsh/ohmyzsh/issues/9562
 DISABLE_MAGIC_FUNCTIONS=true
+export DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
 
 plugins=(docker docker-compose lein git tmux sudo systemd mise)
 export DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
