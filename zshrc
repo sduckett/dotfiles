@@ -59,7 +59,7 @@ PATH=$HOME/bin:$HOME/.local/bin:$HOME/repos/gitlab.com/gateless/sh/bin:$PATH
 
 function code-artifact() {
      CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain gateless --domain-owner 546781284141 --query authorizationToken --output text`
- }
+}
 
 if [ -f "which code-artifact" ]; then
   code-artifact
@@ -68,17 +68,15 @@ fi
 export GPG_TTY="$(tty)"
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 gpgconf --launch gpg-agent
+gpg-connect-agent updatestartuptty /bye > /dev/null
 
-# begin bitcar
-export BITCAR_WORKSPACE_DIR="/Users/sean/repos"
+export BITCAR_WORKSPACE_DIR="$HOME/repos"
 export BITCAR_EDITOR_CMD="emacsclient"
 source $HOME/.bitcar/cli.sh
 source $HOME/.bitcar/completions.sh
-# end bitcar
 
-# #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/Users/sean/.sdkman"
-[[ -s "/Users/sean/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/sean/.sdkman/bin/sdkman-init.sh"
-export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
+
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "/$HOME/.sdkman/bin/sdkman-init.sh"
 
 eval "$(mise activate zsh)"
